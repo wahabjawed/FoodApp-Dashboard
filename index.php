@@ -16,13 +16,14 @@ include 'header/_user-details.php';
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Dashboard - Contact Manager</title>
+    <title>Dashboard - FulFill App</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="css/justified-nav.css" rel="stylesheet">
+ 
+  <script src="js/jquery-1.11.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -42,7 +43,7 @@ include 'header/_user-details.php';
 
       <!-- Jumbotron -->
       <div class="jumbotron">
-        <h1>Marketing stuff!</h1>
+       
         <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
         <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
       </div>
@@ -69,7 +70,7 @@ include 'header/_user-details.php';
 
       <!-- Site footer -->
       <div class="footer">
-        <p>&copy; StudioBinary 2014</p>
+        <p>&copy; SilverSages Studio 2014</p>
       </div>
 
     </div> <!-- /container -->

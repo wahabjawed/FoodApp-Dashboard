@@ -54,7 +54,7 @@ if($_POST)
     <meta name="author" content="Wahab Jawed">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Signin - Contact Manager</title>
+    <title>Signin - FulFill App</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -77,7 +77,7 @@ if($_POST)
     <div class="container">
 
       <form class="form-signin" role="form" method="post" action="login.php">
-        <h2 class="form-signin-heading">Please sign in</h2>
+     <center>   <h3 class="form-signin-heading">FulFill Admin Panel</h3><center>
         <input type="text" id="username"  name="username" class="form-control" placeholder="Username" required autofocus>
         <br>
         <input type="password" id="password"  name="password" class="form-control" placeholder="Password" required>
