@@ -2,6 +2,7 @@
 echo"
 	  <div class='masthead'>
    <center> <h2 class='text-muted'>FulFill - Administrative Panel</h2></center>
+<div >
     <nav id='myNavbar' class='navbar navbar-default' role='navigation'>
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class='container'>
@@ -36,15 +37,13 @@ echo"
                             <li><a href='#'>Statistics</a></li>
 							<li><a href='#'>Logs</a></li>
                         </ul>
-                    </li>";
-					
-					
-					
-			
-                echo" </ul>
+                    </li>
+					 <li><a href='tracking.php'>Orders</a></li>
+					 <li><a href='tracking.php'>Payment</a></li>
+                </ul>
                 <ul class='nav navbar-nav navbar-right' style='margin-right:0px;'>
                     <li class='dropdown'>
-                        <a href='#' data-toggle='dropdown' class='dropdown-toggle'>${_name} <b class='caret'></b></a>
+                        <a href='#' data-toggle='dropdown' class='dropdown-toggle'>$_name <b class='caret'></b></a>
                         <ul class='dropdown-menu'>";
                           if($typeID==1){
 							  
@@ -59,11 +58,12 @@ echo"
             </div><!-- /.navbar-collapse -->
         </div>
     </nav>
-</div>";
+</div>
+</div>"
+;
 	
+  
 	
-		
 	
 ?>
-
 
