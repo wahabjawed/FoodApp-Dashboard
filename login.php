@@ -36,7 +36,9 @@ if($_POST)
 	else
 	{
 		//$_SESSION['username'] = "fakesession";
-		echo "incorrect credentials";
+		echo "<div class='alert alert-danger' role='alert'>
+  <a href='#' class='alert-link'>Incorrect Credentials!</a>
+</div>";
 	}
 	
 	}

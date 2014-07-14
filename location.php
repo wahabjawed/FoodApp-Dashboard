@@ -138,7 +138,7 @@ function resets(){
         				
         				
       					<td>${name}</td>
-						<td><img src='UploadedImages\\${display}' height='70px' width='70px' class='img-responsive'/></td>
+						<td>${display}</td>
             <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
 			<a href='location_update.php?id={$id}'>Update</a></td>
    

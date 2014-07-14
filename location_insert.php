@@ -44,26 +44,27 @@ include 'header/_user-details.php';
 	
 	{
 		
-		include 'header/image_upload.php';
+		
 	
 		$name = $_POST['inputName'];
 	
-		if(!isset($UploadedImg) or $UploadedImg=="")
-			{
-			$UploadedImg='country.png';
-				
-	     }
 		
+			$display=$_POST['inputDisplay'];
+				
+	   
 		try {
 			$query = "INSERT INTO location(location_name,display) values (:name, :display);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':name',$name);
-			$sth->bindValue(':display',$UploadedImg);
+			$sth->bindValue(':display',$display);
 			
 			$sth->execute() ;
 		
-			echo "Location Saved Successfully!";
+			echo "
+			<div class='alert alert-success' role='alert'>
+  <a href='#' class='alert-link'>Location Saved Successfully!</a>
+</div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
 		}
@@ -87,7 +88,7 @@ include 'header/_user-details.php';
            <div class="form-group">
             <label for="inputLName" class="col-sm-2 control-label">Display</label>
             <div class="col-sm-10">
-             <input type="file" value="File" name="file" id="file" required/>
+              <input type="text" class="form-control" id="inputDisplay" name="inputDisplay" placeholder="Display" required>
             </div>
           </div>
           

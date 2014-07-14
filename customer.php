@@ -12,7 +12,7 @@ if($_POST)
 	{	
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			
-			$query = "select * from customers left outer join state on  customer_stateid=state_id
+			$query = "select * from customer left outer join state on  customer_stateid=state_id
 											  left outer join country on customer_countryid=country_id
 											  left outer join location on customer_locationid=location_id
 					   where (customer_id=:searchTerm or customer_fname like :searchTerm or customer_lname like :searchTerm or customer_address like :searchTerm or customer_city like :searchTerm or customer_zip like :searchTerm or country_name like :searchTerm or state_name like :searchTerm) order by customer_id";
@@ -24,7 +24,7 @@ if($_POST)
 		
 else{
 			
- 			$query = "select * from customers left outer join state on  customer_stateid=state_id
+ 			$query = "select * from customer left outer join state on  customer_stateid=state_id
 											  left outer join country on customer_countryid=country_id
 					   						  left outer join location on customer_locationid=location_id
 					order by customer_id";

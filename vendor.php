@@ -14,7 +14,7 @@ if($_POST)
 			
 			$query =" select * from vendor left outer join state on  vendor_stateid=state_id
 											  left outer join country on vendor_countryid=country_id
-											  left outer join center_coordinates on vendor_coordinates_id = coordinates_id
+											  left outer join center_coordinates on vendor_coordinates_id = center_coordinates_id
 					   where (vendor_id=:searchTerm or vendor_name like :searchTerm or vendorstore_no like :searchTerm or vendor_address like :searchTerm or vendor_city like :searchTerm or vendor_zip like :searchTerm or country_name like :searchTerm or state_name like :searchTerm) order by vendor_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
@@ -26,7 +26,7 @@ else{
 			
  			$query = "select * from vendor left outer join state on  vendor_stateid=state_id
 											  left outer join country on vendor_countryid=country_id
-											  left outer join center_coordinates on vendor_coordinates_id = coordinates_id
+											  left outer join center_coordinates on vendor_coordinates_id = center_coordinates_id
 					order by vendor_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();

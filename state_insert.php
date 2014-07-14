@@ -16,7 +16,7 @@ include 'header/_user-details.php';
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Country - FulFill App</title>
+<title>State - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -56,7 +56,10 @@ include 'header/_user-details.php';
 			
 			$sth->execute() ;
 		
-			echo "State Saved Successfully!";
+						echo "
+			<div class='alert alert-success' role='alert'>
+  <a href='#' class='alert-link'>State Saved Successfully!</a>
+</div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
 		}

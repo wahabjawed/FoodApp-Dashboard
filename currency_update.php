@@ -12,13 +12,13 @@ if(isset($_GET['id'])){
 	$id = $_GET['id'];
 	
 	
-	$query = "Select * from currency_code where currencycode_id = :ID";
+	$query = "Select * from currency_code where currency_code_id = :ID";
 	$sth = $dbh->prepare($query);
 	$sth->bindValue(':ID',$id);
 	$sth->execute();
 	$result = $sth->fetchAll();
 	$row = $result[0];
-	$currency_id=$row['currencycode_id'];
+	$currency_id=$row['currency_code_id'];
 	
 	
 	$code = $row['currency_code'];
@@ -70,7 +70,7 @@ if(isset($_GET['id'])){
 		
 		
 		try {
-			$query = "UPDATE currency_code SET currency_code=:code where currencycode_id = :id";
+			$query = "UPDATE currency_code SET currency_code=:code where currency_code_id = :id";
 			
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':id',$_GET["id"]);
@@ -79,7 +79,7 @@ if(isset($_GET['id'])){
 			$sth->execute() ;
 		
 			echo "Currency Updated Successfully!";
-			header( 'Location: currency.php' );
+			header( 'Location: currency_code.php' );
 		} catch(PDOException $e) {
 		
 			die('Could not save to the database:<br/>' . $e);

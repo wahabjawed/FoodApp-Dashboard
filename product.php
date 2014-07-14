@@ -12,7 +12,8 @@ if($_POST)
 	{	
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			
-			$query = "select * from currency_code where currencycode_id=:searchTerm or currency_code like :searchTerm order by currencycode_id";
+			$query = "select * from product left outer join vendor on  product_vendorid=vendor_id
+							   where (product_id=:searchTerm or product_name like :searchTerm or product_type like :searchTerm or vendor_name like :searchTerm or vendor_city like :searchTerm) order by product_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
     		$stmt->execute();
@@ -21,7 +22,8 @@ if($_POST)
 		
 else{
 			
- 			$query = "select* from currency_code order by currencycode_id";
+ 			$query = "select * from product left outer join vendor on  product_vendorid=vendor_id
+						order by product_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
     	
@@ -39,7 +41,7 @@ else{
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Currency - FulFill App</title>
+<title>Products - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -59,12 +61,12 @@ else{
 
 <script>
 function link(){
-	window.location.href = "currency_insert.php"
+	window.location.href = "product_insert.php"
 	}
 
 
 function resets(){
-	window.location.href = "currency.php"
+	window.location.href = "product.php"
 	}
 	
 
@@ -74,7 +76,7 @@ function resets(){
 		
 		if(result == true)
 		{	
-			this.document.deleteForm.action = "delete.php?id="+id+"&type=currency_code";
+			this.document.deleteForm.action = "delete.php?id="+id+"&type=product";
 			
 			this.document.deleteForm.submit();
 		
@@ -95,7 +97,7 @@ function resets(){
  ?>
 
   <div style="margin-bottom:20px;margin-top:20px">
-     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="currency.php">
+     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="products.php">
       <div class="form-group">
         <label class="sr-only" for="searchTerm">Search Term</label>
         <input type="text" class="form-control" id="searchTerm" name= "searchTerm" placeholder="Enter Search Term">
@@ -110,9 +112,13 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=10%>#</th>
-            <th width=70%>Currency Code</th>
-            <th width=20%>Action</th>
+            <th width=5%>#</th>
+            <th width=10%>Name</th>
+            <th width=10%>Type</th>
+            <th width=10%>Price</th>
+            <th width=20%>Vendor Info</th>
+            <th width=20%>Display</th>
+            <th width=10%>Action</th>
            
           </tr>
         </thead>
@@ -127,17 +133,26 @@ function resets(){
 			while($result = $stmt->fetch(PDO::FETCH_ASSOC))
 			{
 				//	$result = $result[0];
-			$id = $result['currencycode_id'];
-			$code=$result['currency_code'];
-		    
+			$id = $result['product_id'];
+			$name=$result['product_name'];
+			$type=$result['product_type'];
+			$price=$result['product_price'];
+			$address = "ID: ".$result['vendor_id']."<br>"."Name: ".$result['vendor_name']."<br>"."Store No: ".$result['vendorstore_no']."<br> "."Address: ".$result['vendor_address']."<br> "."Zip: ".$result['vendor_zip'];
+    		$display = $result['product_display'];
+		
 			echo "
           <tr>
             <td>{$id}</td>
         				
         				
-      					<td>${code}</td>
-            <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
-			<a href='currency_update.php?id={$id}'>Update</a></td>
+      					<td>${name}</td>
+						<td>${type}</td>
+						<td>${price}</td>
+						<td>${address}</td>
+						<td>${display}</td>
+						
+		    <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
+			<a href='product_update.php?id={$id}'>Update</a></td>
    
           </tr>";
 			}

@@ -65,16 +65,11 @@ if(isset($_GET['id'])){
 		
 		
 		$name = $_POST['inputName'];
-		$code = $_FILES["file"]["name"];
+		$code = $_POST['inputDisplay'];
 		
-		include 'header/image_upload.php';	
+	
 
-	if(empty($UploadedImg)){
-		$imgGet = $_GET['img'];
-		$code = $imgGet;
-		}else{
-		$code = $UploadedImg;	
-		}
+	
 		
 		
 		try {
@@ -86,8 +81,8 @@ if(isset($_GET['id'])){
 			$sth->bindValue(':name',$name);
 			$sth->execute() ;
 		
-			echo "Location Updated Successfully!";
-			//header( 'Location: location.php' );
+			//echo "Location Updated Successfully!";
+			header( 'Location: location.php' );
 		} catch(PDOException $e) {
 		
 			die('Could not save to the database:<br/>' . $e);
@@ -115,7 +110,9 @@ if(isset($_GET['id'])){
            <div class="form-group">
             <label for="inputUName" class="col-sm-2 control-label">Display</label>
             <div class="col-sm-10">
-          <input type="file" value="<?php echo $code;?>" name="file" id="file"/>            </div>
+                <input type="text" class="form-control" id="inputDisplay" name="inputDisplay" placeholder="Display" value="<?php echo $code;?>" required>
+            
+                    </div>
           </div>
            
       

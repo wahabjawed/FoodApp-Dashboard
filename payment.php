@@ -12,10 +12,8 @@ if($_POST)
 	{	
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			
-			$query = "select * from employee left outer join state on  employee_stateid=state_id
-											  left outer join country on employee_countryid=country_id
-											  left outer join center_coordinates on employee_coordinates_id = center_coordinates_id
-					   where (employee_id=:searchTerm or employee_fname like :searchTerm or employee_lname like :searchTerm or employee_address like :searchTerm or employee_city like :searchTerm or employee_zip like :searchTerm or country_name like :searchTerm or state_name like :searchTerm) order by employee_id";
+			$query = "select * from payment left outer join order on  payment_order_id=order_id left outer join customer on customer_id=payment_customer_id
+							   where (product_id=:searchTerm or product_name like :searchTerm or product_type like :searchTerm or vendor_name like :searchTerm or vendor_city like :searchTerm) order by product_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
     		$stmt->execute();
@@ -24,10 +22,8 @@ if($_POST)
 		
 else{
 			
- 			$query = "select * from employee left outer join state on  employee_stateid=state_id
-											  left outer join country on employee_countryid=country_id
-											   left outer join center_coordinates on employee_coordinates_id = center_coordinates_id
-				order by employee_id";
+ 			$query = "select * from payment left outer join orders on  payment_order_id=order_id left outer join customer on customer_id=payment_customer_id
+						";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
     	
@@ -45,7 +41,7 @@ else{
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Employee - FulFill App</title>
+<title>Payment - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -65,12 +61,12 @@ else{
 
 <script>
 function link(){
-	window.location.href = "employee_insert.php"
+	window.location.href = "payment_insert.php"
 	}
 
 
 function resets(){
-	window.location.href = "employee.php"
+	window.location.href = "payment.php"
 	}
 	
 
@@ -80,7 +76,7 @@ function resets(){
 		
 		if(result == true)
 		{	
-			this.document.deleteForm.action = "delete.php?id="+id+"&type=employee";
+			this.document.deleteForm.action = "delete.php?id="+id+"&type=payment";
 			
 			this.document.deleteForm.submit();
 		
@@ -101,7 +97,7 @@ function resets(){
  ?>
 
   <div style="margin-bottom:20px;margin-top:20px">
-     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="vendor.php">
+     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="payment.php">
       <div class="form-group">
         <label class="sr-only" for="searchTerm">Search Term</label>
         <input type="text" class="form-control" id="searchTerm" name= "searchTerm" placeholder="Enter Search Term">
@@ -117,12 +113,12 @@ function resets(){
         <thead>
           <tr>
             <th width=5%>#</th>
-            <th width=10%>Name</th>
-            <th width=25%>Address Info</th>
-            <th width=20%>Location Info</th>
-            <th width=20%>Extra Info</th>
-            <th width=10%>Available</th>
-            <th width=10%>Action</th>
+            <th width=10%>Date</th>
+            <th width=10%>Type</th>
+            <th width=25%>Customer Info</th>
+            <th width=25%>Order Info</th>
+            <th width=25%>Transaction Info</th>
+           
            
           </tr>
         </thead>
@@ -137,25 +133,25 @@ function resets(){
 			while($result = $stmt->fetch(PDO::FETCH_ASSOC))
 			{
 				//	$result = $result[0];
-			$id = $result['employee_id'];
-			$name=$result['employee_fname']." ".$result['employee_lname'];
-			$available=$result['employee_available'];
-			$address = "City: ".$result['employee_city']."<br>"."State: ".$result['state_name']."<br> "."Zip: ".$result['employee_zip']."<br> "."Country: ".$result['country_name'];
-			$location= "Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat']."<br>"."Radius: ".$result['radius'];
-		$extra = "Image Id: ".$result['employeeimage_id'];
+			$id = $result['payment_id'];
+			$date=$result['payment_date'];
+			$type=$result['payment_type'];
+			$customer="ID: ".$result['customer_id']."<br>"."Name: ".$result['customer_fname']." ".$result['customer_lname']."<br>"."Address: ".$result['customer_address']."<br> "."Cell: ".$result['customer_cell']."<br> "."Phone: ".$result['customer_phone'];
+
+			$order = "ID: ".$result['order_id']."<br>"."Name: ".$result['order_name']."<br>"."Date: ".$result['order_date']."<br> "."Status: ".$result['order_status']."<br> "."Delivery: ".$result['delivery_time'];
+    	
 		
 			echo "
           <tr>
             <td>{$id}</td>
         				
         				
-      					<td>${name}</td>
-						<td>${address}</td>
-						<td>${location}</td>
-						<td>${extra}</td>
-						<td>${available}</td>
-		    <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
-			<a href='customer_update.php?id={$id}'>Update</a></td>
+      					<td>${date}</td>
+						<td>${type}</td>
+						<td>${customer}</td>
+						<td>${order}</td>
+						
+						
    
           </tr>";
 			}

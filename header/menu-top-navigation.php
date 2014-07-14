@@ -23,13 +23,13 @@ echo"
                         <a href='#' data-toggle='dropdown' class='dropdown-toggle'>Setup <b class='caret'></b></a>
                         <ul class='dropdown-menu'>
 						    <li><a href='country.php'>Country</a></li>
-                            <li><a href='currency.php'>Currency</a></li>
+                            <li><a href='currency_code.php'>Currency</a></li>
 							<li><a href='customer.php'>Customer</a></li>
 							<li><a href='edu.php'>EDU</a></li>
 							<li><a href='employee.php'>Employees</a></li>
-                            <li><a href='products.php'>Product</a></li>
+                            <li><a href='product.php'>Product</a></li>
                             <li><a href='location.php'>Location</a></li>
-							<li><a href='#'>Location Cordinate</a></li>
+							<li><a href='center_coordinates.php'>Center Coordinate</a></li>
 							<li><a href='state.php'>State</a></li>
 							<li><a href='status.php'>Status</a></li>
 							<li><a href='vendor.php'>Vendor</a></li>
@@ -38,8 +38,8 @@ echo"
 							<li><a href='#'>Logs</a></li>
                         </ul>
                     </li>
-					 <li><a href='tracking.php'>Orders</a></li>
-					 <li><a href='tracking.php'>Payment</a></li>
+					 <li><a href='#'>Order</a></li>
+					 <li><a href='#'>Payment</a></li>
                 </ul>
                 <ul class='nav navbar-nav navbar-right' style='margin-right:0px;'>
                     <li class='dropdown'>

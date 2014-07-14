@@ -63,7 +63,10 @@ include 'header/_user-details.php';
 			
 			$sth->execute() ;
 		
-			echo "EDU Saved Successfully!";
+						echo "
+			<div class='alert alert-success' role='alert'>
+  <a href='#' class='alert-link'>EDU Saved Successfully!</a>
+</div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
 		}

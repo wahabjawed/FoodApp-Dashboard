@@ -16,11 +16,10 @@ include 'header/_user-details.php';
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>User - Contact Manager</title>
+<title>Product - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
-
 
 
   <script src="js/jquery-1.11.1.js"></script>
@@ -44,27 +43,28 @@ include 'header/_user-details.php';
 	if($_POST)
 	{
 	
-		$username = $_POST['inputUName'];
-		$name = $_POST['inputName'];
+		$name= $_POST['inputName'];
+		$type = $_POST['inputType'];
+		$price = $_POST['inputPrice'];
+		$venID = $_POST['inputVendorID'];
+		$display = $_POST['inputDisplay'];
 		
-		$email = $_POST['inputEmail'];
-		$password = $_POST['inputPassword'];
-		$type= 2;
 		
 		try {
-			$query = "INSERT INTO user(username, name, email, type_id,password) values (:username, :name, :email, :type,:password);";
+			$query = "INSERT INTO product(product_name,product_type,product_price,product_vendorid,product_display) values (:name, :type, :price, :ven_id, :display);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
-			$sth->bindValue(':username',$username);
 			$sth->bindValue(':name',$name);
-			$sth->bindValue(':email',$email);
 			$sth->bindValue(':type',$type);
-			$sth->bindValue(':password',$password);
+			$sth->bindValue(':price',$price);
+			$sth->bindValue(':ven_id',$venID);
+			$sth->bindValue(':display',$display);
+			
 			$sth->execute() ;
 		
 						echo "
 			<div class='alert alert-success' role='alert'>
-  <a href='#' class='alert-link'>User Saved Successfully!</a>
+  <a href='#' class='alert-link'>Product Saved Successfully!</a>
 </div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
@@ -74,55 +74,80 @@ include 'header/_user-details.php';
   
   <!-- Jumbotron -->
   <div class="jumbotron">
-    <form class="form-horizontal" role="form" method="post" action="user_insert.php">
+    <form class="form-horizontal" role="form" method="post" action="product_insert.php">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ADD USER</h3>
+          <h3 class="panel-title">ADD PRODUCT</h3>
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label for="inputFName" class="col-sm-2 control-label">Name</label>
+            <label for="inputName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" required>
             </div>
           </div>
+           <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Type</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputType" name="inputType" placeholder="Type" required>
+            </div>
+          </div>
           
            <div class="form-group">
-            <label for="inputUName" class="col-sm-2 control-label">Username</label>
+            <label for="inputTax" class="col-sm-2 control-label">Price</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputUName" name="inputUName" placeholder="Username" required>
+              <input type="text" class="form-control" id="inputPrice" name="inputPrice" placeholder="Price" required>
             </div>
           </div>
-            <div class="form-group">
-            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+          
+                     <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Vendor</label>
             <div class="col-sm-10">
-              <input type="Email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email" required>
+            <select class="form-control" id="inputVendorID" name="inputVendorID" required>
+               <option value=0> Select Vendor</option>
+               <?php 
+			   
+			 $query = "select * from vendor";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$ven_id = $result['vendor_id'];
+		    $ven_name = $result['vendor_name'];
+		
+		    
+			echo "<option value=${ven_id}> ${ven_name} </option>";
+			}
+		 ?>
+         </select>
             </div>
           </div>
-            <div class="form-group">
-            <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+                     <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Display</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password" required>
+              <input type="text" class="form-control" id="inputDisplay" name="inputDisplay" placeholder="Display" required>
             </div>
           </div>
-          <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10" style="float:right">
+    
+        <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
           <button type="submit" class="btn btn-default">Post</button>
         </div>
-      </div>   
-    
+      </div>
         
         </div>
       </div>
-      
+       
     </form>
   </div>
   
   <!-- Site footer -->
   <div class="footer">
     <p>&copy; SilverSages Studio 2014</p>
-  
-</div>
+  </div>
 </div>
 <!-- /container --> 
 

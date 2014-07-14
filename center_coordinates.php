@@ -11,23 +11,19 @@ include 'header/_user-details.php';
 if($_POST)
 	{	
 			$searchTerm = "%".$_POST['searchTerm']."%";
+			$searchTermNo = $_POST['searchTerm'];
 			
-			$query = "select * from employee left outer join state on  employee_stateid=state_id
-											  left outer join country on employee_countryid=country_id
-											  left outer join center_coordinates on employee_coordinates_id = center_coordinates_id
-					   where (employee_id=:searchTerm or employee_fname like :searchTerm or employee_lname like :searchTerm or employee_address like :searchTerm or employee_city like :searchTerm or employee_zip like :searchTerm or country_name like :searchTerm or state_name like :searchTerm) order by employee_id";
+			$query = "select * from center_coordinates left outer join location on coordinates_location_id=location_id where center_coordinates_id=:searchTermNo or map_url like :searchTerm or coordinates_lat like :searchTermNo or coordinates_long like :searchTermNo order by center_coordinates_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
+			$stmt->bindParam(':searchTermNo', $searchTermNo);
     		$stmt->execute();
     	
 	}
 		
 else{
 			
- 			$query = "select * from employee left outer join state on  employee_stateid=state_id
-											  left outer join country on employee_countryid=country_id
-											   left outer join center_coordinates on employee_coordinates_id = center_coordinates_id
-				order by employee_id";
+ 			$query = "select * from center_coordinates left outer join location on coordinates_location_id=location_id order by center_coordinates_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
     	
@@ -45,7 +41,7 @@ else{
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Employee - FulFill App</title>
+<title>Center Coordinates - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -65,12 +61,12 @@ else{
 
 <script>
 function link(){
-	window.location.href = "employee_insert.php"
+	window.location.href = "coordinate_insert.php"
 	}
 
 
 function resets(){
-	window.location.href = "employee.php"
+	window.location.href = "center_coordinates.php"
 	}
 	
 
@@ -80,7 +76,7 @@ function resets(){
 		
 		if(result == true)
 		{	
-			this.document.deleteForm.action = "delete.php?id="+id+"&type=employee";
+			this.document.deleteForm.action = "delete.php?id="+id+"&type=center_coordinates";
 			
 			this.document.deleteForm.submit();
 		
@@ -101,7 +97,7 @@ function resets(){
  ?>
 
   <div style="margin-bottom:20px;margin-top:20px">
-     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="vendor.php">
+     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="center_coordinates.php">
       <div class="form-group">
         <label class="sr-only" for="searchTerm">Search Term</label>
         <input type="text" class="form-control" id="searchTerm" name= "searchTerm" placeholder="Enter Search Term">
@@ -116,13 +112,13 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=5%>#</th>
-            <th width=10%>Name</th>
-            <th width=25%>Address Info</th>
-            <th width=20%>Location Info</th>
-            <th width=20%>Extra Info</th>
-            <th width=10%>Available</th>
-            <th width=10%>Action</th>
+            <th width=10%>#</th>
+            <th width=9%>Longitude</th>
+            <th width=9%>Latitude</th>
+            <th width=7%>Radius</th>
+            <th width=20%>Map URL</th>
+            <th width=30%>Location Info</th>
+            <th width=15%>Action</th>
            
           </tr>
         </thead>
@@ -137,25 +133,24 @@ function resets(){
 			while($result = $stmt->fetch(PDO::FETCH_ASSOC))
 			{
 				//	$result = $result[0];
-			$id = $result['employee_id'];
-			$name=$result['employee_fname']." ".$result['employee_lname'];
-			$available=$result['employee_available'];
-			$address = "City: ".$result['employee_city']."<br>"."State: ".$result['state_name']."<br> "."Zip: ".$result['employee_zip']."<br> "."Country: ".$result['country_name'];
-			$location= "Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat']."<br>"."Radius: ".$result['radius'];
-		$extra = "Image Id: ".$result['employeeimage_id'];
-		
+			$id = $result['center_coordinates_id'];
+		    $longitude = $result['coordinates_long'];
+			$latitude=$result['coordinates_lat'];
+			$radius=$result['radius'];
+			$map=$result['map_url'];
+			$location= "Name: ".$result['location_name']."<br>"."Display: ${result['display']}";
+		    
 			echo "
           <tr>
             <td>{$id}</td>
         				
-        				
-      					<td>${name}</td>
-						<td>${address}</td>
+        				<td>${longitude}</td>
+      					<td>${latitude}</td>
+						<td>${radius}</td>
+						<td><a href'${map}'>${map}</a></td>
 						<td>${location}</td>
-						<td>${extra}</td>
-						<td>${available}</td>
-		    <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
-			<a href='customer_update.php?id={$id}'>Update</a></td>
+            <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
+			<a href='coordinate_update.php?id={$id}'>Update</a></td>
    
           </tr>";
 			}
