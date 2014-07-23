@@ -156,7 +156,9 @@ if(isset($_GET['id'])){
                      <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Display</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputDisplay" name="inputDisplay" placeholder="Display" value="<?php echo $display; ?>" required>
+              <input type="hidden" name="inputDisplay" value="0" />
+   <input type="checkbox" class="form-control"  name="inputDisplay"  value="1" <?php if($display==1)
+   							echo 'checked';?>>
             </div>
           </div>
     

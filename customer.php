@@ -141,7 +141,7 @@ function resets(){
 			$name=$result['customer_fname']." ".$result['customer_lname'];
 			$address = "Address: ".$result['customer_address']."<br>"."City: ".$result['customer_city']."<br>"."State: ".$result['state_name']."<br> "."Zip: ".$result['customer_zip']."<br> "."Country: ".$result['country_name'];
 	$contact = "Email: ".$result['customer_email']."<br>"."Phone: ".$result['customer_phone']."<br>"."Cell: ".$result['customer_cell'];
-		$location= $result['location_name'];
+		$location= "ID: ".$result['location_id']."<br>Name: ".$result['location_name'];
 		$extra = "Major: ".$result['customer_major']."<br>"."Grade: ".$result['customer_gradclass']."<br>"."Password: ".$result['customer_password']; 
 			echo "
           <tr>

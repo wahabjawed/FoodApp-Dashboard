@@ -128,8 +128,8 @@ include 'header/_user-details.php';
                      <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Display</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputDisplay" name="inputDisplay" placeholder="Display" required>
-            </div>
+                     <input type="hidden" name="inputDisplay" value="0" />
+            <input type="checkbox" class="form-control" id="inputDisplay" name="inputDisplay" value="1" >                      </div>
           </div>
     
         <div class="form-group">

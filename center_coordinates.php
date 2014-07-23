@@ -13,7 +13,7 @@ if($_POST)
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			$searchTermNo = $_POST['searchTerm'];
 			
-			$query = "select * from center_coordinates left outer join location on coordinates_location_id=location_id where center_coordinates_id=:searchTermNo or map_url like :searchTerm or coordinates_lat like :searchTermNo or coordinates_long like :searchTermNo order by center_coordinates_id";
+			$query = "select * from center_coordinates where center_coordinates_id=:searchTermNo or map_url like :searchTerm or coordinates_lat like :searchTermNo or coordinates_long like :searchTermNo order by center_coordinates_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
 			$stmt->bindParam(':searchTermNo', $searchTermNo);
@@ -23,7 +23,7 @@ if($_POST)
 		
 else{
 			
- 			$query = "select * from center_coordinates left outer join location on coordinates_location_id=location_id order by center_coordinates_id";
+ 			$query = "select * from center_coordinates order by center_coordinates_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
     	
@@ -112,13 +112,13 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=10%>#</th>
-            <th width=9%>Longitude</th>
-            <th width=9%>Latitude</th>
+            <th width=5%>#</th>
+            <th width=10%>Name</th>
+            <th width=14%>Longitude</th>
+            <th width=14%>Latitude</th>
             <th width=7%>Radius</th>
-            <th width=20%>Map URL</th>
-            <th width=30%>Location Info</th>
-            <th width=15%>Action</th>
+            <th width=25%>Map URL</th>
+            <th width=20%>Action</th>
            
           </tr>
         </thead>
@@ -136,19 +136,18 @@ function resets(){
 			$id = $result['center_coordinates_id'];
 		    $longitude = $result['coordinates_long'];
 			$latitude=$result['coordinates_lat'];
-			$radius=$result['radius'];
+			$radius="KM: ".$result['radius_km']."<br> Mile: ".$result['radius_mile'];
 			$map=$result['map_url'];
-			$location= "Name: ".$result['location_name']."<br>"."Display: ${result['display']}";
 		    
 			echo "
           <tr>
             <td>{$id}</td>
-        				
+        				<td>${result['coordinates_name']}</td>
         				<td>${longitude}</td>
       					<td>${latitude}</td>
 						<td>${radius}</td>
 						<td><a href'${map}'>${map}</a></td>
-						<td>${location}</td>
+						
             <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
 			<a href='coordinate_update.php?id={$id}'>Update</a></td>
    

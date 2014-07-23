@@ -16,7 +16,7 @@ include 'header/_user-details.php';
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Employee - FulFill App</title>
+<title>Vendor - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -52,34 +52,39 @@ include 'header/_user-details.php';
 				
 	     }
 	
-		$fname= $_POST['inputFName'];
-		$lname= $_POST['inputLName'];
-		$address =$_POST['inputAddress'];
+		$name= $_POST['inputName'];
+		$store= $_POST['inputStore'];
 		$city = $_POST['inputCity'];
 		$stateid = $_POST['inputState'];
 		$zip = $_POST['inputZip'];
 		$countryid = $_POST['inputCountry'];
-		$available = $_POST['inputAvailable'];
-		
+		$address = $_POST['inputAddress'];
+		$coorid = $_POST['inputCoor'];
+		$display = $_POST['inputDisplay'];
+		$opentime = $_POST['inputOpenT'];
+		$closetime = $_POST['inputCloseT'];
 		
 		try {
-			$query = "INSERT INTO employee(employee_fname, employee_lname, employee_address, employee_city,employee_stateid,employee_zip,employee_countryid,employeeimage_id,employee_available) values (:fname, :lname , :address, :city, :stateid, :zip, :countryid, :image,:available);";
+			$query = "INSERT INTO vendor(vendor_name,vendorstore_no, vendor_city,vendor_stateid,vendor_zip,vendor_countryid,vendor_imageid,vendor_address, vendor_coordinates_id,vendor_display,vendor_opentime,vendor_closetime) values (:name, :store, :city, :stateid, :zip, :countryid, :image,:address, :coorid,:display,:opent,:closet);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
-			$sth->bindValue(':fname',$fname);
-			$sth->bindValue(':lname',$lname);
-			$sth->bindValue(':address',$address);
+			$sth->bindValue(':name',$name);
+			$sth->bindValue(':store',$store);
 			$sth->bindValue(':city',$city);
 			$sth->bindValue(':stateid',$stateid);
 			$sth->bindValue(':zip',$zip);
 			$sth->bindValue(':countryid',$countryid);
-			$sth->bindValue(':available',$available);				
-			$sth->bindValue(':image',$UploadedImg);						
+			$sth->bindValue(':address',$address);	
+			$sth->bindValue(':coorid',$coorid);	
+			$sth->bindValue(':display',$display);				
+			$sth->bindValue(':image',$UploadedImg);
+			$sth->bindValue(':opent',$opentime);
+			$sth->bindValue(':closet',$closetime);						
 			$sth->execute() ;
 		
 						echo "
 			<div class='alert alert-success' role='alert'>
-  <a href='#' class='alert-link'>Employee Saved Successfully!</a>
+  <a href='#' class='alert-link'>Vendor Saved Successfully!</a>
 </div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
@@ -89,26 +94,26 @@ include 'header/_user-details.php';
   
   <!-- Jumbotron -->
   <div class="jumbotron">
-    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="employee_insert.php">
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="vendor_insert.php">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ADD EMPLOYEE</h3>
+          <h3 class="panel-title">ADD VENDOR</h3>
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label for="inputName" class="col-sm-2 control-label">First Name</label>
+            <label for="inputName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputFName" name="inputFName" placeholder="First Name" required>
+              <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" required>
             </div>
           </div>
            <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Last Name</label>
+            <label for="inputTax" class="col-sm-2 control-label">Store No</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputLName" name="inputLName" placeholder="Last Name" required>
+              <input type="text" class="form-control" id="inputStore" name="inputStore" placeholder="Store No" required>
             </div>
           </div>
           
-           <div class="form-group">
+               <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Address</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="inputAddress" name="inputAddress" placeholder="Address" required>
@@ -188,16 +193,56 @@ include 'header/_user-details.php';
           </div>
  
     
-               <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Availability</label>
+             
+                     <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Coordinates</label>
             <div class="col-sm-10">
-                 <input type="hidden" name="inputAvailable" value="0" />
-            <input type="checkbox" class="form-control" id="inputAvailable" name="inputAvailable" value="1" >
+            <select class="form-control" id="inputCoor" name="inputCoor[]" required>
+               <option value=0> Select Coordinates</option>
+               <?php 
+			   
+			 $query = "select * from center_coordinates";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$coor_id = $result['center_coordinates_id'];
+		    $coor_name = $result['coordinates_name'];
+		
+		    
+			echo "<option value=${coor_id}> ${coor_name} </option>";
+			}
+		 ?>
+         </select>
             </div>
           </div>
- 
- 
-                     
+    
+    
+                  <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Open Time</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputOpenT" name="inputOpenT" placeholder="Open Time" required>
+            </div>
+          </div>
+          
+                        <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Close Time</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputCloseT" name="inputCloseT" placeholder="Close Time" required>
+            </div>
+          </div>
+    
+    
+      <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Display</label>
+            <div class="col-sm-10">
+                 <input type="hidden" name="inputDisplay" value="0" />
+            <input type="checkbox" class="form-control" id="inputDisplay" name="inputDisplay" value="1" >    </div>
+          </div>
+    
     
         <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">

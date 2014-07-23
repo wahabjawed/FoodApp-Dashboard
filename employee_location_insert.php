@@ -16,7 +16,7 @@ include 'header/_user-details.php';
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>State - FulFill App</title>
+<title>Employee Location - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -40,27 +40,30 @@ include 'header/_user-details.php';
   <?php include 'header/menu-top-navigation.php';?>
   <?PHP
 
-	if($_POST)
-	{
+	if($_SERVER['REQUEST_METHOD'] == "POST")
 	
-		$name = $_POST['inputName'];
-		$abbreviation = $_POST['inputAbbr'];
-		$tax = $_POST['inputTax'];
+	{
 		
 		
+	
+		$employee = $_POST['inputEmployee'];
+	
+		
+			$location=$_POST['inputLocation'];
+				
+	   
 		try {
-			$query = "INSERT INTO state(state_name, state_abbreviation, state_salestax) values (:name, :abbreviation ,:tax);";
+			$query = "INSERT INTO employee_location(el_location_id,el_employee_id) values (:location, :employee);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
-			$sth->bindValue(':name',$name);
-			$sth->bindValue(':abbreviation',$abbreviation);
-			$sth->bindValue(':tax',$tax);
+			$sth->bindValue(':location',$location);
+			$sth->bindValue(':employee',$employee);
 			
 			$sth->execute() ;
 		
-						echo "
+			echo "
 			<div class='alert alert-success' role='alert'>
-  <a href='#' class='alert-link'>State Saved Successfully!</a>
+  <a href='#' class='alert-link'>Employee Location Saved Successfully!</a>
 </div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
@@ -70,33 +73,68 @@ include 'header/_user-details.php';
   
   <!-- Jumbotron -->
   <div class="jumbotron">
-    <form class="form-horizontal" role="form" method="post" action="state_insert.php">
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="employee_location_insert.php">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ADD STATE</h3>
+          <h3 class="panel-title">ADD EMPLOYEE LOCATION</h3>
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label for="inputName" class="col-sm-2 control-label">Name</label>
+            <label for="inputFName" class="col-sm-2 control-label">Employee </label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" required>
-            </div>
-          </div>
           
-           
-          <div class="form-group">
-            <label for="inputName" class="col-sm-2 control-label">Abbreviation</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputAbbr" name="inputAbbr" placeholder="Abbreviation" required>
+          
+              <select class="form-control" id="inputEmployee" name="inputEmployee" required>
+               <option value=0> Select Employee</option>
+               <?php 
+			   
+			 $query = "select * from employee";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$emp_id = $result['employee_id'];
+		    $emp_name = $result['employee_fname']." ".$result['employee_lname'];
+		
+		    
+			echo "<option value=${emp_id}> ${emp_name} </option>";
+			}
+		 ?>
+         </select>
             </div>
           </div>
+    
+          
           
            <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Sales Tax</label>
+            <label for="inputLName" class="col-sm-2 control-label">Location</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputTax" name="inputTax" placeholder="Sales Tax" required>
+             <select class="form-control" id="inputLocation" name="inputLocation" required>
+               <option value=0> Select Location</option>
+               <?php 
+			   
+			 $query = "select * from location";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$coor_id = $result['location_id'];
+		    $coor_name = $result['location_name'];
+		
+		    
+			echo "<option value=${coor_id}> ${coor_name} </option>";
+			}
+		 ?>
+         </select>
             </div>
           </div>
+    
           
     
         <div class="form-group">

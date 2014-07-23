@@ -42,29 +42,32 @@ include 'header/_user-details.php';
 
 	if($_POST)
 	{
-	
+	$name= $_POST['inputName'];
 		$ilong= $_POST['inputLong'];
 		$lat = $_POST['inputLat'];
-		$radius = $_POST['inputRadius'];
-		$locID = $_POST['inputLocID'];
+		$radius_km = $_POST['inputRadiusKM'];
+		$radius_mile = $_POST['inputRadiusMile'];
+		
 		$mapURL = $_POST['inputURL'];
 		
 		
 		try {
-			$query = "INSERT INTO center_coordinates(coordinates_long,coordinates_lat,radius,coordinates_location_id,map_url) values (:ilong, :lat, :radius, :loc_id, :map_url);";
+			$query = "INSERT INTO center_coordinates ( coordinates_name, coordinates_long,coordinates_lat,radius_km,radius_mile,map_url) values (:name, :ilong, :lat, :radiuskm, :radiusmile,  :map_url);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':ilong',$ilong);
 			$sth->bindValue(':lat',$lat);
-			$sth->bindValue(':radius',$radius);
-			$sth->bindValue(':loc_id',$locID);
+			$sth->bindValue(':radiuskm',$radius_km);
+			$sth->bindValue(':radiusmile',$radius_mile);
+			
 			$sth->bindValue(':map_url',$mapURL);
+			$sth->bindValue(':name',$name);
 			
 			$sth->execute() ;
 		
 						echo "
 			<div class='alert alert-success' role='alert'>
-  <a href='#' class='alert-link'>Coordinates Saved Successfully!</a>
+  <a href='#' class='alert-link'>Location Coordinates Saved Successfully!</a>
 </div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
@@ -77,9 +80,18 @@ include 'header/_user-details.php';
     <form class="form-horizontal" role="form" method="post" action="coordinate_insert.php">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ADD COORDINATES</h3>
+          <h3 class="panel-title">ADD LOCATION COORDINATES</h3>
         </div>
         <div class="panel-body">
+        
+          <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" required>
+            </div>
+          </div>
+        
+        
           <div class="form-group">
             <label for="inputName" class="col-sm-2 control-label">Latitude</label>
             <div class="col-sm-10">
@@ -94,38 +106,20 @@ include 'header/_user-details.php';
           </div>
           
            <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Radius</label>
+            <label for="inputTax" class="col-sm-2 control-label">Radius KM</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputRadius" name="inputRadius" placeholder="Radius" required>
+              <input type="text" class="form-control" id="inputRadiusKM" name="inputRadiusKM" placeholder="Radius KM" required>
             </div>
           </div>
           
-                     <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Location</label>
+            <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Radius Mile</label>
             <div class="col-sm-10">
-            <select class="form-control" id="inputLocID" name="inputLocID" required>
-               <option value=0> Select Location </option>
-               <?php 
-			   
-			 $query = "select * from location";
-			$stmt = $dbh->prepare($query);
-			$stmt->execute();
- 
- 
- while($result = $stmt->fetch(PDO::FETCH_ASSOC))
-			{
-				//	$result = $result[0];
-			$loc_id = $result['location_id'];
-		    $loc_name = $result['location_name'];
-		
-		    
-			echo "<option value=${loc_id}> ${loc_name} </option>";
-			}
-		 ?>
-         </select>
+              <input type="text" class="form-control" id="inputRadiusMile" name="inputRadiusMile" placeholder="Radius Mile" required>
             </div>
           </div>
-                     <div class="form-group">
+          
+                             <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Map URL</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="inputURL" name="inputURL" placeholder="Map URL" required>

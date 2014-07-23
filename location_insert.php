@@ -50,14 +50,18 @@ include 'header/_user-details.php';
 	
 		
 			$display=$_POST['inputDisplay'];
+			$coor=$_POST['inputCoorID'];
+			
 				
 	   
 		try {
-			$query = "INSERT INTO location(location_name,display) values (:name, :display);";
+			$query = "INSERT INTO location(location_name,display,location_coordinate_id) values (:name, :display,:coor);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':name',$name);
 			$sth->bindValue(':display',$display);
+			$sth->bindValue(':coor',$coor);
+			
 			
 			$sth->execute() ;
 		
@@ -85,12 +89,43 @@ include 'header/_user-details.php';
               <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" required>
             </div>
           </div>
-           <div class="form-group">
-            <label for="inputLName" class="col-sm-2 control-label">Display</label>
+
+
+                      <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Coordinate</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputDisplay" name="inputDisplay" placeholder="Display" required>
+            <select class="form-control" id="inputCoorID" name="inputCoorID[]" required>
+               <option value=0> Select Coordinate </option>
+               <?php 
+			   
+			 $query = "select * from center_coordinates";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$loc_id = $result['center_coordinates_id'];
+		    $loc_name = $result['coordinates_name'];
+		
+		    
+			echo "<option value=${loc_id}> ${loc_name} </option>";
+			}
+		 ?>
+         </select>
             </div>
           </div>
+
+           <div class="form-group">
+            <label for="inputLName" class="col-sm-2 control-label">Enable</label>
+            <div class="col-sm-10">
+                <input type="hidden" name="inputDisplay" value="0" />
+            <input type="checkbox" class="form-control" id="inputDisplay" name="inputDisplay" value="1" >          </div>
+          </div>
+          
+
+ 
           
     
         <div class="form-group">

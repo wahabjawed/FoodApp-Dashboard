@@ -12,7 +12,7 @@ if($_POST)
 	{	
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			
-			$query = "select * from state where state_id=:searchTerm or state_name like :searchTerm order by state_id";
+			$query = "select * from state where state_id=:searchTerm or state_name like :searchTerm or state_abbreviation like :searchTerm order by state_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
     		$stmt->execute();
@@ -110,8 +110,9 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=10%>#</th>
-            <th width=50%>State Name</th>
+            <th width=10%>State ID</th>
+            <th width=30%>State Name</th>
+            <th width=20%>Abbreviation</th>
             <th width=20%>Sales Tax</th>
             <th width=20%>Action</th>
            
@@ -130,6 +131,7 @@ function resets(){
 				//	$result = $result[0];
 			$id = $result['state_id'];
 		    $name = $result['state_name'];
+			$abbr = $result['state_abbreviation'];
 			$code=$result['state_salestax'];
 		    
 			echo "
@@ -137,6 +139,7 @@ function resets(){
             <td>{$id}</td>
         				
         				<td>${name}</td>
+						<td>${abbr}</td>
       					<td>${code}</td>
             <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
 			<a href='state_update.php?id={$id}'>Update</a></td>

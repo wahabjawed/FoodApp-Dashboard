@@ -1,6 +1,5 @@
 <?php
-echo"
-	  <div class='masthead'>
+echo"<div class='masthead'>
    <center> <h2 class='text-muted'>FulFill - Administrative Panel</h2></center>
 <div >
     <nav id='myNavbar' class='navbar navbar-default' role='navigation'>
@@ -27,9 +26,10 @@ echo"
 							<li><a href='customer.php'>Customer</a></li>
 							<li><a href='edu.php'>EDU</a></li>
 							<li><a href='employee.php'>Employees</a></li>
+							<li><a href='employee_location.php'>Employees Location</a></li>
                             <li><a href='product.php'>Product</a></li>
                             <li><a href='location.php'>Location</a></li>
-							<li><a href='center_coordinates.php'>Center Coordinate</a></li>
+							<li><a href='center_coordinates.php'>Location Coordinate</a></li>
 							<li><a href='state.php'>State</a></li>
 							<li><a href='status.php'>Status</a></li>
 							<li><a href='vendor.php'>Vendor</a></li>
@@ -59,11 +59,5 @@ echo"
         </div>
     </nav>
 </div>
-</div>"
-;
-	
-  
-	
-	
-?>
+</div>";?>
 

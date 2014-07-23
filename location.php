@@ -12,7 +12,7 @@ if($_POST)
 	{	
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			
-			$query = "select * from location where location_id=:searchTerm or location_name like :searchTerm order by location_id";
+			$query = "select * from location left outer join center_coordinates on location_coordinate_id = center_coordinates_id where location_id=:searchTerm or location_name like :searchTerm order by location_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
     		$stmt->execute();
@@ -21,7 +21,7 @@ if($_POST)
 		
 else{
 			
- 			$query = "select* from location order by location_id";
+ 			$query = "select* from location left outer join center_coordinates on location_coordinate_id = center_coordinates_id order by location_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
     	
@@ -110,9 +110,10 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=10%>#</th>
-            <th width=55%>Location Name</th>
-            <th width=15%>Display</th>
+            <th width=10%>Location ID</th>
+            <th width=30%>Location Name</th>
+            <th width=25%>Coordinate Info</th>
+            <th width=15%>Enable</th>
             <th width=20%>Action</th>
            
           </tr>
@@ -131,6 +132,7 @@ function resets(){
 			$id = $result['location_id'];
 			$name=$result['location_name'];
 				$display=$result['display'];
+				$location= "ID: ".$result['center_coordinates_id']."<br>Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat'];
 		    
 			echo "
           <tr>
@@ -138,6 +140,7 @@ function resets(){
         				
         				
       					<td>${name}</td>
+						<td>${location}</td>						
 						<td>${display}</td>
             <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
 			<a href='location_update.php?id={$id}'>Update</a></td>

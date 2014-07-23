@@ -110,7 +110,7 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=10%>#</th>
+            <th width=10%>Currency ID</th>
             <th width=70%>Currency Code</th>
             <th width=20%>Action</th>
            

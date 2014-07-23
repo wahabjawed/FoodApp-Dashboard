@@ -116,13 +116,14 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=5%>#</th>
+            <th width=5%>Vendor ID</th>
             <th width=9%>Name</th>
             <th width=7%>Store No</th>
-            <th width=20%>Address Info</th>
-            <th width=16%>Location Info</th>
-            <th width=15%>Extra Info</th>
-            <th width=20%>Display</th>
+            <th width=25%>Address Info</th>
+            <th width=16%>Location Coordinate</th>
+            <th width=15%>Image</th>
+            <th width=3%>Display</th>
+            <th width=12%>Time</th>
             <th width=8%>Action</th>
            
           </tr>
@@ -142,9 +143,10 @@ function resets(){
 			$name=$result['vendor_name'];
 			$store=$result['vendorstore_no'];
 			$address = "Address: ".$result['vendor_address']."<br>"."City: ".$result['vendor_city']."<br>"."State: ".$result['state_name']."<br> "."Zip: ".$result['vendor_zip']."<br> "."Country: ".$result['country_name'];
-			$location= "Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat']."<br>"."Radius: ".$result['radius'];
-		$extra = "Image Id: ".$result['vendor_imageid'];
-		$display = $result['display']; 
+			$location= "ID: ".$result['center_coordinates_id']."<br>Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat'];
+		$extra = "Image Id: <br><img src='UploadedImages\\${result['vendor_imageid']}' height='70px' width='70px' class='img-responsive'/>";
+		$display = $result['vendor_display'];
+		$times= "Open : ".$result['vendor_opentime']."<br> Close : ".$result['vendor_closetime'];
 			echo "
           <tr>
             <td>{$id}</td>
@@ -156,8 +158,9 @@ function resets(){
 						<td>${location}</td>
 						<td>${extra}</td>
 						<td>${display}</td>
+						<td>${times}</td>
             <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
-			<a href='customer_update.php?id={$id}'>Update</a></td>
+			<a href='vendor_update.php?id={$id}'>Update</a></td>
    
           </tr>";
 			}

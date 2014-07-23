@@ -10,9 +10,9 @@ include 'header/_user-details.php';
 
 if($_POST)
 	{	
-			$searchTerm = "%".$_POST['searchTerm']."%";
+			$searchTerm = $_POST['searchTerm'];
 			
-			$query = "select * from status where status_id=:searchTerm or status like :searchTerm order by status_id";
+			$query = "select * from employee_location left outer join location on location_id=el_location_id left outer join employee on employee_id= el_employee_id where employee_location_id=:searchTerm or el_location_id like :searchTerm order by employee_location_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
     		$stmt->execute();
@@ -21,7 +21,7 @@ if($_POST)
 		
 else{
 			
- 			$query = "select* from status order by status_id";
+ 			$query = "select * from employee_location left outer join location on location_id=el_location_id left outer join employee on employee_id= el_employee_id order by employee_location_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
     	
@@ -39,7 +39,7 @@ else{
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Status - FulFill App</title>
+<title>Location - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -59,12 +59,12 @@ else{
 
 <script>
 function link(){
-	window.location.href = "status_insert.php"
+	window.location.href = "employee_location_insert.php"
 	}
 
 
 function resets(){
-	window.location.href = "status.php"
+	window.location.href = "employee_location.php"
 	}
 	
 
@@ -74,7 +74,7 @@ function resets(){
 		
 		if(result == true)
 		{	
-			this.document.deleteForm.action = "delete.php?id="+id+"&type=status";
+			this.document.deleteForm.action = "delete.php?id="+id+"&type=employee_location";
 			
 			this.document.deleteForm.submit();
 		
@@ -95,7 +95,7 @@ function resets(){
  ?>
 
   <div style="margin-bottom:20px;margin-top:20px">
-     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="status.php">
+     <form name="search-form" id="search-form" class="form-inline" role="form" enctype="multipart/form-data" method="post" action="employee_location.php">
       <div class="form-group">
         <label class="sr-only" for="searchTerm">Search Term</label>
         <input type="text" class="form-control" id="searchTerm" name= "searchTerm" placeholder="Enter Search Term">
@@ -110,8 +110,9 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=10%>Status ID</th>
-            <th width=70%>Status</th>
+            <th width=20%>Employee Location ID</th>
+            <th width=30%>Location Info</th>
+            <th width=30%>Employee Info</th>
             <th width=20%>Action</th>
            
           </tr>
@@ -127,17 +128,19 @@ function resets(){
 			while($result = $stmt->fetch(PDO::FETCH_ASSOC))
 			{
 				//	$result = $result[0];
-			$id = $result['status_id'];
-			$name=$result['status'];
+			$id = $result['employee_location_id'];
+			$employee="ID: ".$result['employee_id']."<br> Name: ".$result['employee_fname']." ".$result['employee_lname'];
+			$location="ID: ".$result['location_id']."<br> Name: ".$result['location_name'];
 		    
 			echo "
           <tr>
             <td>{$id}</td>
         				
-        				<td>${name}</td>
-      				
+        				
+      					<td>${location}</td>
+						<td>${employee}</td>
             <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
-			<a href='status_update.php?id={$id}'>Update</a></td>
+			<a href='employee_location_update.php?id={$id}'>Update</a></td>
    
           </tr>";
 			}

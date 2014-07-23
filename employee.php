@@ -14,7 +14,7 @@ if($_POST)
 			
 			$query = "select * from employee left outer join state on  employee_stateid=state_id
 											  left outer join country on employee_countryid=country_id
-											  left outer join center_coordinates on employee_coordinates_id = center_coordinates_id
+											  
 					   where (employee_id=:searchTerm or employee_fname like :searchTerm or employee_lname like :searchTerm or employee_address like :searchTerm or employee_city like :searchTerm or employee_zip like :searchTerm or country_name like :searchTerm or state_name like :searchTerm) order by employee_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
@@ -26,7 +26,7 @@ else{
 			
  			$query = "select * from employee left outer join state on  employee_stateid=state_id
 											  left outer join country on employee_countryid=country_id
-											   left outer join center_coordinates on employee_coordinates_id = center_coordinates_id
+											   
 				order by employee_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
@@ -117,9 +117,8 @@ function resets(){
         <thead>
           <tr>
             <th width=5%>#</th>
-            <th width=10%>Name</th>
-            <th width=25%>Address Info</th>
-            <th width=20%>Location Info</th>
+            <th width=20%>Name</th>
+            <th width=35%>Address Info</th>
             <th width=20%>Extra Info</th>
             <th width=10%>Available</th>
             <th width=10%>Action</th>
@@ -140,9 +139,9 @@ function resets(){
 			$id = $result['employee_id'];
 			$name=$result['employee_fname']." ".$result['employee_lname'];
 			$available=$result['employee_available'];
-			$address = "City: ".$result['employee_city']."<br>"."State: ".$result['state_name']."<br> "."Zip: ".$result['employee_zip']."<br> "."Country: ".$result['country_name'];
-			$location= "Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat']."<br>"."Radius: ".$result['radius'];
-		$extra = "Image Id: ".$result['employeeimage_id'];
+			$address = "Address: ".$result['employee_address']."<br>City: ".$result['employee_city']."<br>"."State: ".$result['state_name']."<br> "."Zip: ".$result['employee_zip']."<br> "."Country: ".$result['country_name'];
+			//$location= "ID: ".$result['center_coordinates_id']."<br>"."Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat']."<br>"."Radius KM: ".$result['radius_km']."<br>Radius Mile: ".$result['radius_mile'];;
+		$extra = "Image: <br> <img src='UploadedImages\\${result['employeeimage_id']}' height='70px' width='70px' class='img-responsive'/>";
 		
 			echo "
           <tr>
@@ -151,11 +150,11 @@ function resets(){
         				
       					<td>${name}</td>
 						<td>${address}</td>
-						<td>${location}</td>
+						
 						<td>${extra}</td>
 						<td>${available}</td>
 		    <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
-			<a href='customer_update.php?id={$id}'>Update</a></td>
+			<a href='employee_update.php?id={$id}'>Update</a></td>
    
           </tr>";
 			}

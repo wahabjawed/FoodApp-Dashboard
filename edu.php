@@ -110,9 +110,11 @@ function resets(){
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th width=10%>#</th>
-            <th width=55%>EDU Name</th>
-            <th width=15%>Display</th>
+            <th width=10%>EDU ID</th>
+            <th width=25%>EDU Name</th>
+            <th width=25%>Email Prefix</th>
+            <th width=5%>Display</th>
+            <th width=15%>Image</th>
             <th width=20%>Action</th>
            
           </tr>
@@ -130,7 +132,9 @@ function resets(){
 				//	$result = $result[0];
 			$id = $result['edu_id'];
 			$name=$result['edu_name'];
-				$display=$result['display'];
+			$display=$result['display'];
+			$prefix=$result['email_prefix'];
+			$image="<img src='UploadedImages\\${result['edu_imageid']}' height='70px' width='70px' class='img-responsive'/>";
 		    
 			echo "
           <tr>
@@ -138,7 +142,9 @@ function resets(){
         				
         				
       					<td>${name}</td>
-						<td><img src='UploadedImages\\${display}' height='70px' width='70px' class='img-responsive'/></td>
+						<td>${prefix}</td>
+						<td>${display}</td>
+						<td>${image}</td>
             <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
 			<a href='edu_update.php?id={$id}'>Update</a></td>
    

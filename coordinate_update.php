@@ -19,10 +19,12 @@ if(isset($_GET['id'])){
 	$result = $sth->fetchAll();
 	$row = $result[0];
 	$cc_id=$row['center_coordinates_id'];
+    $ccname = $row['coordinates_name'];
 	$cclong = $row['coordinates_long'];
 	$cclat = $row['coordinates_lat'];
-	$ccradius = $row['radius'];
-	$ccloc = $row['coordinates_location_id'];
+	$ccradiuskm = $row['radius_km'];
+	$ccradiusmile = $row['radius_mile'];
+	
 	$ccurl = $row['map_url'];
 	
 		}
@@ -67,22 +69,25 @@ if(isset($_GET['id'])){
 	
 		
 		
+		$name= $_POST['inputName'];
 		$ilong= $_POST['inputLong'];
 		$lat = $_POST['inputLat'];
-		$radius = $_POST['inputRadius'];
-		$locID = $_POST['inputLocID'];
+		$radiusKM = $_POST['inputRadiusKM'];
+		$radiusMile = $_POST['inputRadiusMile'];
 		$mapURL = $_POST['inputURL'];
 		
 		
 		try {
-			$query = "UPDATE center_coordinates SET coordinates_lat=:lat,coordinates_long=:ilong,radius=:radius, coordinates_location_id=:loc_id, map_url=:map_url where center_coordinates_id = :id";
+			$query = "UPDATE center_coordinates SET coordinates_name=:name, coordinates_lat=:lat,coordinates_long=:ilong, radius_km=:radius_km, radius_mile=:radius_mile,  map_url=:map_url where center_coordinates_id = :id";
 			
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':id',$_GET["id"]);
 			$sth->bindValue(':ilong',$ilong);
+			$sth->bindValue(':name',$name);
 			$sth->bindValue(':lat',$lat);
-			$sth->bindValue(':radius',$radius);
-			$sth->bindValue(':loc_id',$locID);
+			$sth->bindValue(':radius_km',$radiusKM);
+			$sth->bindValue(':radius_mile',$radiusMile);
+		
 			$sth->bindValue(':map_url',$mapURL);
 			$sth->execute() ;
 		
@@ -100,11 +105,19 @@ if(isset($_GET['id'])){
     <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="coordinate_update.php?id=<?php echo $_GET['id']; ?>">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">UPDATE COORDINATES</h3>
+          <h3 class="panel-title">UPDATE LOCATION COORDINATES</h3>
         </div>
         <div class="panel-body">
 
           
+           <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" value ="<?php echo $ccname; ?>" required>
+            </div>
+          </div>
+
+        
            <div class="form-group">
             <label for="inputName" class="col-sm-2 control-label">Latitude</label>
             <div class="col-sm-10">
@@ -119,41 +132,22 @@ if(isset($_GET['id'])){
           </div>
           
            <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Radius</label>
+            <label for="inputTax" class="col-sm-2 control-label">Radius KM</label>
             <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputRadius" name="inputRadius" placeholder="Radius" value ="<?php echo $ccradius; ?>" required>
+            <input type="text" class="form-control" id="inputRadiusKM" name="inputRadiusKM" placeholder="Radius KM" value ="<?php echo $ccradiuskm; ?>" required>
             </div>
           </div>
           
-                     <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Location</label>
+          <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Radius Mile</label>
             <div class="col-sm-10">
-            <select class="form-control" id="inputLocID" name="inputLocID" required>
-            <option value=0> Select Location </option>
-               <?php 
-			   
-			 $query = "select * from location";
-			$stmt = $dbh->prepare($query);
-			$stmt->execute();
- 
- 
- while($result = $stmt->fetch(PDO::FETCH_ASSOC))
-			{
-				//	$result = $result[0];
-			$loc_id = $result['location_id'];
-		    $loc_name = $result['location_name'];
-		
-		    if($cc_id==$loc_id){
-			echo "<option value=${loc_id} selected> ${loc_name} </option>";
-			
-			}else{
-			echo "<option value=${loc_id}> ${loc_name} </option>";
-			}
-			}
-		 ?>
-         </select>
+            <input type="text" class="form-control" id="inputRadiusMile" name="inputRadiusMile" placeholder="Radius Mile" value ="<?php echo $ccradiusmile; ?>" required>
             </div>
           </div>
+          
+          
+          
+          
                      <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Map URL</label>
             <div class="col-sm-10">

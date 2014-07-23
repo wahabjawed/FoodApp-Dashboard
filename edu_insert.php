@@ -43,24 +43,31 @@ include 'header/_user-details.php';
 	if($_SERVER['REQUEST_METHOD'] == "POST")
 	
 	{
-		
 		include 'header/image_upload.php';
 	
-		$name = $_POST['inputName'];
-	
+		
 		if(!isset($UploadedImg) or $UploadedImg=="")
 			{
 			$UploadedImg='edu.png';
 				
 	     }
+	
+		
+	
+	
+		$name = $_POST['inputName'];
+		$prefix = $_POST['inputPrefix'];
+		$display = $_POST['inputDisplay'];
+	
 		
 		try {
-			$query = "INSERT INTO edu(edu_name,display) values (:name, :display);";
+			$query = "INSERT INTO edu(edu_name,email_prefix,display,edu_imageid) values (:name, :prefix ,:display,:img);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':name',$name);
-			$sth->bindValue(':display',$UploadedImg);
-			
+			$sth->bindValue(':display',$display);
+			$sth->bindValue(':prefix',$prefix);
+			$sth->bindValue(':img',$UploadedImg);
 			$sth->execute() ;
 		
 						echo "
@@ -87,12 +94,29 @@ include 'header/_user-details.php';
               <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" required>
             </div>
           </div>
+          <div class="form-group">
+            <label for="inputLName" class="col-sm-2 control-label">Email Prefix</label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputPrefix" name="inputPrefix" placeholder="Email Prefix" required>
+            </div>
+          </div>
+          
            <div class="form-group">
             <label for="inputLName" class="col-sm-2 control-label">Display</label>
             <div class="col-sm-10">
-             <input type="file" value="File" name="file" id="file" required/>
+             <input type="hidden" name="inputDisplay" value="0" />
+            <input type="checkbox" class="form-control" id="inputDisplay" name="inputDisplay" value="1" >
             </div>
           </div>
+          
+          
+          <div class="form-group">
+            <label for="inputLName" class="col-sm-2 control-label">Image</label>
+            <div class="col-sm-10">
+               <input type="file" value="File" name="file" id="file" required/>
+            </div>
+          </div>
+          
           
     
         <div class="form-group">

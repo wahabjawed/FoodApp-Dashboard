@@ -20,7 +20,8 @@ if(isset($_GET['id'])){
 	$row = $result[0];
 	$location_id=$row['location_id'];
 	$name = $row['location_name'];
-	$code = $row['display'];
+	$display = $row['display'];
+	$coor = $row['location_coordinate_id'];
 	
 		}
 
@@ -66,6 +67,7 @@ if(isset($_GET['id'])){
 		
 		$name = $_POST['inputName'];
 		$code = $_POST['inputDisplay'];
+		$coor=$_POST['inputCoorID'];
 		
 	
 
@@ -73,12 +75,13 @@ if(isset($_GET['id'])){
 		
 		
 		try {
-			$query = "UPDATE location SET location_name=:name,display=:code where location_id = :id";
+			$query = "UPDATE location SET location_name=:name,display=:code, location_coordinate_id=:coor where location_id = :id";
 			
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':id',$_GET["id"]);
 			$sth->bindValue(':code',$code);
 			$sth->bindValue(':name',$name);
+			$sth->bindValue(':coor',$coor);
 			$sth->execute() ;
 		
 			//echo "Location Updated Successfully!";
@@ -107,15 +110,53 @@ if(isset($_GET['id'])){
             </div>
           </div>
            
-           <div class="form-group">
-            <label for="inputUName" class="col-sm-2 control-label">Display</label>
+
+
+                    <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Coordinate</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputDisplay" name="inputDisplay" placeholder="Display" value="<?php echo $code;?>" required>
+            <select class="form-control" id="inputCoorID" name="inputCoorID[]" required>
+               <option value=0> Select Coordinate </option>
+               <?php 
+			   
+			 $query = "select * from center_coordinates";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$loc_id = $result['center_coordinates_id'];
+		    $loc_name = $result['coordinates_name'];
+		
+		    if($loc_id==$coor){
+			echo "<option value=${loc_id} selected> ${loc_name} </option>";
+			}else{
+			echo "<option value=${loc_id}> ${loc_name} </option>";
+			}
+			}
+		 ?>
+         </select>
+            </div>
+          </div>
+
+
+           <div class="form-group">
+            <label for="inputUName" class="col-sm-2 control-label">Enable</label>
+            <div class="col-sm-10">
+                  <input type="hidden" name="inputDisplay" value="0" />
+   <input type="checkbox" class="form-control"  name="inputDisplay"  value="1" <?php if($display==1)
+   							echo 'checked';?>>
             
                     </div>
           </div>
            
       
+      
+      
+
+ 
       
        <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10" style="float:right">

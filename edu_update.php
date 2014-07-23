@@ -18,9 +18,11 @@ if(isset($_GET['id'])){
 	$sth->execute();
 	$result = $sth->fetchAll();
 	$row = $result[0];
-	$location_id=$row['edu_id'];
+	$id=$row['edu_id'];
 	$name = $row['edu_name'];
-	$code = $row['display'];
+	$prefix = $row['email_prefix'];
+	$display = $row['display'];
+	$img=$row['edu_imageid'];
 	
 		}
 
@@ -66,6 +68,8 @@ if(isset($_GET['id'])){
 		
 		$name = $_POST['inputName'];
 		$code = $_FILES["file"]["name"];
+		$prefix = $_POST['inputPrefix'];
+		$display = $_POST['inputDisplay'];
 		
 		include 'header/image_upload.php';	
 
@@ -75,15 +79,17 @@ if(isset($_GET['id'])){
 		}else{
 		$code = $UploadedImg;	
 		}
-		
+	
 		
 		try {
-			$query = "UPDATE edu SET edu_name=:name,display=:code where edu_id = :id";
+			$query = "UPDATE edu SET edu_name=:name,display=:display,email_prefix=:prefix,edu_imageid=:code where edu_id = :id";
 			
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':id',$_GET["id"]);
-			$sth->bindValue(':code',$code);
+			$sth->bindValue(':display',$display);
 			$sth->bindValue(':name',$name);
+			$sth->bindValue(':prefix',$prefix);
+			$sth->bindValue(':code',$code);
 			$sth->execute() ;
 		
 			echo "EDU Updated Successfully!";
@@ -97,7 +103,7 @@ if(isset($_GET['id'])){
   
   <!-- Jumbotron -->
   <div class="jumbotron">
-    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="edu_update.php?id=<?php echo $_GET['id']; ?>&img=<?php echo $code; ?>">
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="edu_update.php?id=<?php echo $_GET['id']; ?>&img=<?php echo $img; ?>">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">UPDATE EDU</h3>
@@ -113,11 +119,27 @@ if(isset($_GET['id'])){
           </div>
            
            <div class="form-group">
-            <label for="inputUName" class="col-sm-2 control-label">Display</label>
+            <label for="inputUName" class="col-sm-2 control-label">Email Prefix</label>
             <div class="col-sm-10">
-          <input type="file" value="<?php echo $code;?>" name="file" id="file"/>            </div>
+  <input type="text" class="form-control" id="inputPrefix" name="inputPrefix" placeholder="Email Prefix" value="<?php echo $prefix;?>" required>
+  </div>
           </div>
-           
+  
+           <div class="form-group">
+            <label for="inputDisplay" class="col-sm-2 control-label">Display</label>
+            <div class="col-sm-10">
+            <input type="hidden" name="inputDisplay" value="0" />
+   <input type="checkbox" class="form-control"  name="inputDisplay"  value="1" <?php if($display==1)
+   							echo 'checked';?>>
+  </div>
+          </div>
+            <div class="form-group">
+            <label for="inputLName" class="col-sm-2 control-label">Image</label>
+            <div class="col-sm-10">
+                <input type="file" value="File" name="file" id="file" />
+            </div>
+          </div>
+          
       
       
        <div class="form-group">

@@ -12,24 +12,25 @@ if(isset($_GET['id'])){
 	$id = $_GET['id'];
 	
 	
-	$query = "Select * from employee where employee_id = :ID";
+	$query = "Select * from vendor where vendor_id = :ID";
 	$sth = $dbh->prepare($query);
 	$sth->bindValue(':ID',$id);
 	$sth->execute();
 	$result = $sth->fetchAll();
 	$row = $result[0];
-	$emp_id=$row['employee_id'];
-	$fname = $row['employee_fname'];
-	$lname = $row['employee_lname'];
-	$address = $row['employee_address'];
-	$city = $row['employee_city'];
-	$stateid = $row['employee_stateid'];
-	$zip =  $row['employee_zip'];
-	$countryid =  $row['employee_countryid'];
-	$available =  $row['employee_available'];
-	
-	$img=$row['employeeimage_id'];
-	
+	$ven_id=$row['vendor_id'];
+	$name = $row['vendor_name'];
+	$store = $row['vendorstore_no'];
+	$city = $row['vendor_city'];
+	$stateid = $row['vendor_stateid'];
+	$zip =  $row['vendor_zip'];
+	$countryid =  $row['vendor_countryid'];
+	$address =  $row['vendor_address'];
+	$display =  $row['vendor_display'];
+	$coorid =  $row['vendor_coordinates_id'];
+	$img=$row['vendor_imageid'];
+	$closeTime=$row['vendor_closetime'];
+	$openTime=$row['vendor_opentime'];
 		}
 
 ?>
@@ -43,7 +44,7 @@ if(isset($_GET['id'])){
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Employee - FulFill App</title>
+<title>Vendor - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -71,16 +72,18 @@ if(isset($_GET['id'])){
 	{
 		
 		
-		$fname= $_POST['inputFName'];
-		$lname= $_POST['inputLName'];
-		$address = $_POST['inputAddress'];
+		$name= $_POST['inputName'];
+		$store= $_POST['inputStore'];
 		$city = $_POST['inputCity'];
 		$stateid = $_POST['inputState'];
 		$zip = $_POST['inputZip'];
 		$countryid = $_POST['inputCountry'];
-		$available = $_POST['inputAvailable'];
-	
+		$address = $_POST['inputAddress'];
+		$coorid = $_POST['inputCoor'];
+		$display = $_POST['inputDisplay'];
 		$imageID=$_FILES["file"]["name"];
+		$opentime = $_POST['inputOpenT'];
+		$closetime = $_POST['inputCloseT'];
 		
 		
 		include 'header/image_upload.php';	
@@ -93,23 +96,26 @@ if(isset($_GET['id'])){
 		}
 		
 		try {
-			$query = "UPDATE employee SET employee_fname=:fname, employee_lname=:lname, employee_address=:address, employee_city=:city, employee_stateid=:stateid, employee_zip=:zip, employee_countryid=:countryid, employee_available=:available , employeeimage_id=:image where employee_id = :id";
+			$query = "UPDATE vendor SET vendor_name=:name, vendorstore_no=:store, vendor_city=:city, vendor_stateid=:stateid, vendor_zip=:zip, vendor_countryid=:countryid, vendor_address=:address , vendor_coordinates_id =:coorid , vendor_imageid=:image, vendor_display=:display, vendor_opentime=:opent, vendor_closetime=:closet where vendor_id = :id";
 			
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':id',$_GET["id"]);
-		    $sth->bindValue(':fname',$fname);
-			$sth->bindValue(':lname',$lname);
-			$sth->bindValue(':address',$address);
+		  	$sth->bindValue(':name',$name);
+			$sth->bindValue(':store',$store);
 			$sth->bindValue(':city',$city);
 			$sth->bindValue(':stateid',$stateid);
 			$sth->bindValue(':zip',$zip);
 			$sth->bindValue(':countryid',$countryid);
-			$sth->bindValue(':available',$available);	
-			$sth->bindValue(':image',$code);				
+			$sth->bindValue(':address',$address);	
+			$sth->bindValue(':coorid',$coorid);	
+			$sth->bindValue(':display',$display);				
+			$sth->bindValue(':image',$code);		
+			$sth->bindValue(':opent',$opentime);
+			$sth->bindValue(':closet',$closetime);				
 			$sth->execute() ;
 		
 			//echo "Product Updated Successfully!";
-			header( 'Location: employee.php' );
+			header( 'Location: vendor.php' );
 		} catch(PDOException $e) {
 		
 			die('Could not save to the database:<br/>' . $e);
@@ -119,24 +125,24 @@ if(isset($_GET['id'])){
   
   <!-- Jumbotron -->
   <div class="jumbotron">
-    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="employee_update.php?id=<?php echo $_GET['id']; ?>&img=<?php echo $img; ?>">
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="vendor_update.php?id=<?php echo $_GET['id']; ?>&img=<?php echo $img; ?>">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">UPDATE EMPLOYEE</h3>
+          <h3 class="panel-title">UPDATE VENDOR</h3>
         </div>
         <div class="panel-body">
 
           
         <div class="form-group">
-            <label for="inputName" class="col-sm-2 control-label">First Name</label>
+            <label for="inputName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputFName" name="inputFName" placeholder="First Name" value="<?php echo $fname; ?>" required>
+              <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Name" value="<?php echo $name; ?>" required>
             </div>
           </div>
            <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Last Name</label>
+            <label for="inputTax" class="col-sm-2 control-label">Store No</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputLName" name="inputLName" value="<?php echo $lname; ?>" placeholder="Last Name" required>
+              <input type="text" class="form-control" id="inputStore" name="inputStore" value="<?php echo $store; ?>" placeholder="Store No" required>
             </div>
           </div>
           
@@ -228,20 +234,66 @@ echo "<option value=${sta_id} selected> ${sta_name} </option>";
           </div>
  
     
-               <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Availability</label>
+        
+ 
+ 
+                     <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Coordinates</label>
             <div class="col-sm-10">
-              
-              
-               <input type="hidden" name="inputAvailable" value="0" />
-   <input type="checkbox" class="form-control"  name="inputAvailable"  value="1" <?php if($available==1)
-   							echo 'checked';?>>
-              
+            <select class="form-control" id="inputCoor" name="inputCoor[]" required>
+               <option value=0> Select Coordinates</option>
+               <?php 
+			   
+			 $query = "select * from center_coordinates";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$coor_id = $result['center_coordinates_id'];
+		    $coor_name = $result['coordinates_name'];
+		
+		    if($coorid==$coor_id){
+			
+			echo "<option value=${coor_id} selected> ${coor_name} </option>";
+			
+			}else{
+			
+			echo "<option value=${coor_id}> ${coor_name} </option>";
+			
+			}
+			}
+		 ?>
+         </select>
             </div>
           </div>
- 
- 
-       
+    
+    
+    
+            <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Open Time</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputOpenT" name="inputOpenT" placeholder="Open Time"  value="<?php echo $openTime; ?>" required>
+            </div>
+          </div>
+          
+                        <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Close Time</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputCloseT" name="inputCloseT" placeholder="Close Time"  value="<?php echo $closeTime; ?>" required>
+            </div>
+          </div>
+    
+               <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Display</label>
+            <div class="col-sm-10">
+              <input type="hidden" name="inputDisplay" value="0" />
+   <input type="checkbox" class="form-control"  name="inputDisplay"  value="1" <?php if($display==1)
+   							echo 'checked';?>>
+            </div>
+          </div>
     
         <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">

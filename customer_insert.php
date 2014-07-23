@@ -16,7 +16,7 @@ include 'header/_user-details.php';
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-<title>Employee - FulFill App</title>
+<title>Customer - FulFill App</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -43,43 +43,52 @@ include 'header/_user-details.php';
 	if($_POST)
 	{
 		
-		include 'header/image_upload.php';
+		
 	
 		
-		if(!isset($UploadedImg) or $UploadedImg=="")
-			{
-			$UploadedImg='edu.png';
-				
-	     }
+		
 	
 		$fname= $_POST['inputFName'];
 		$lname= $_POST['inputLName'];
-		$address =$_POST['inputAddress'];
 		$city = $_POST['inputCity'];
 		$stateid = $_POST['inputState'];
 		$zip = $_POST['inputZip'];
 		$countryid = $_POST['inputCountry'];
-		$available = $_POST['inputAvailable'];
+		$address = $_POST['inputAddress'];
+		$coorid = $_POST['inputLoc'];
+		$email = $_POST['inputEmail'];
+		$phone = $_POST['inputPhone'];
+		$cell = $_POST['inputCell'];		
+		$major = $_POST['inputMajor'];
+		$grade = $_POST['inputGrade'];
+		$password = $_POST['inputPassword'];
 		
+		
+		echo $coorid[1];
 		
 		try {
-			$query = "INSERT INTO employee(employee_fname, employee_lname, employee_address, employee_city,employee_stateid,employee_zip,employee_countryid,employeeimage_id,employee_available) values (:fname, :lname , :address, :city, :stateid, :zip, :countryid, :image,:available);";
+			$query = "INSERT INTO customer(customer_fname,customer_lname, customer_city,customer_stateid,customer_zip,customer_countryid,customer_email,customer_address,customer_phone,customer_cell,customer_major,customer_gradclass,customer_password) values (:fname, :lname, :city, :stateid, :zip, :countryid, :email,:address, :phone,:cell,:major,:grade,:password);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':fname',$fname);
 			$sth->bindValue(':lname',$lname);
-			$sth->bindValue(':address',$address);
 			$sth->bindValue(':city',$city);
 			$sth->bindValue(':stateid',$stateid);
 			$sth->bindValue(':zip',$zip);
 			$sth->bindValue(':countryid',$countryid);
-			$sth->bindValue(':available',$available);				
-			$sth->bindValue(':image',$UploadedImg);						
+			$sth->bindValue(':address',$address);	
+			//$sth->bindValue(':coorid',$coorid);	
+			$sth->bindValue(':email',$email);				
+			$sth->bindValue(':cell',$cell);
+			$sth->bindValue(':phone',$phone);
+			$sth->bindValue(':grade',$grade);
+			$sth->bindValue(':major',$major);
+			$sth->bindValue(':password',$password);						
 			$sth->execute() ;
 		
 						echo "
 			<div class='alert alert-success' role='alert'>
-  <a href='#' class='alert-link'>Employee Saved Successfully!</a>
+  <a href='#' class='alert-link'>Customer Saved Successfully!</a>
 </div>";
 		} catch(PDOException $e) {
 			die('Could not save to the database:<br/>' . $e);
@@ -89,10 +98,10 @@ include 'header/_user-details.php';
   
   <!-- Jumbotron -->
   <div class="jumbotron">
-    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="employee_insert.php">
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data" action="customer_insert.php">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ADD EMPLOYEE</h3>
+          <h3 class="panel-title">ADD CUSTOMER</h3>
         </div>
         <div class="panel-body">
           <div class="form-group">
@@ -108,7 +117,7 @@ include 'header/_user-details.php';
             </div>
           </div>
           
-           <div class="form-group">
+               <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Address</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="inputAddress" name="inputAddress" placeholder="Address" required>
@@ -180,24 +189,84 @@ include 'header/_user-details.php';
          </select>
             </div>
           </div>
-                     <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Image</label>
+          
+          
+            <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
-               <input type="file" value="File" name="file" id="file" required/>
+              <input type="text" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email" required>
             </div>
           </div>
- 
+          
+            <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Phone</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="Phone" required>
+            </div>
+          </div>
+          
+            <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Cell</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputCell" name="inputCell" placeholder="Cell" required>
+            </div>
+          </div>
+          
+           
     
-               <div class="form-group">
-            <label for="inputTax" class="col-sm-2 control-label">Availability</label>
+    
+     <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Major</label>
             <div class="col-sm-10">
-                 <input type="hidden" name="inputAvailable" value="0" />
-            <input type="checkbox" class="form-control" id="inputAvailable" name="inputAvailable" value="1" >
+              <input type="text" class="form-control" id="inputMajor" name="inputMajor" placeholder="Major" required>
             </div>
           </div>
+          
+            <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Grade</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputGrade" name="inputGrade" placeholder="Grade Class" required>
+            </div>
+          </div>
+          
+            <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password" required>
+            </div>
+          </div>
+          
+           
+    
+             
+                     <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Location</label>
+            <div class="col-sm-10">
+            <select class="form-control" id="inputLoc" name="inputLoc[]" multiple required>
+               <option value=0> Select Location</option>
+               <?php 
+			   
+			 $query = "select * from location";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
  
  
-                     
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$coor_id = $result['location_id'];
+		    $coor_name = $result['location_name'];
+		
+		    
+			echo "<option value=${coor_id}> ${coor_name} </option>";
+			}
+		 ?>
+         </select>
+            </div>
+          </div>
+    
+    
+        
     
         <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
