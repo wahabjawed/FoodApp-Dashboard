@@ -12,7 +12,7 @@ if($_POST)
 	{	
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			
-			$query = "select * from location left outer join center_coordinates on location_coordinate_id = center_coordinates_id where location_id=:searchTerm or location_name like :searchTerm order by location_id";
+			$query = "select * from location where location_id=:searchTerm or location_name like :searchTerm order by location_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
     		$stmt->execute();
@@ -21,7 +21,7 @@ if($_POST)
 		
 else{
 			
- 			$query = "select* from location left outer join center_coordinates on location_coordinate_id = center_coordinates_id order by location_id";
+ 			$query = "select* from location order by location_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
     	
@@ -131,9 +131,17 @@ function resets(){
 				//	$result = $result[0];
 			$id = $result['location_id'];
 			$name=$result['location_name'];
-				$display=$result['display'];
-				$location= "ID: ".$result['center_coordinates_id']."<br>Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat'];
-		    
+			$display=$result['display'];
+			$coorid_arr=$result['location_coordinate_id'];
+			
+			$query = "select * from center_coordinates where center_coordinates_id in (${coorid_arr}) ";
+			$stmts = $dbh->prepare($query);
+    		$stmts->execute();
+			$location="";
+			while($results = $stmts->fetch(PDO::FETCH_ASSOC))
+			{
+			$location= $location."ID: ".$results['center_coordinates_id']."<br>Longitude: ".$results['coordinates_long']."<br>"."Latitude: ".$results['coordinates_lat']."<br>";
+			}
 			echo "
           <tr>
             <td>{$id}</td>

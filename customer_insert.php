@@ -62,12 +62,12 @@ include 'header/_user-details.php';
 		$major = $_POST['inputMajor'];
 		$grade = $_POST['inputGrade'];
 		$password = $_POST['inputPassword'];
-		
+		$coorid = implode(', ',$coorid);
 		
 		echo $coorid[1];
 		
 		try {
-			$query = "INSERT INTO customer(customer_fname,customer_lname, customer_city,customer_stateid,customer_zip,customer_countryid,customer_email,customer_address,customer_phone,customer_cell,customer_major,customer_gradclass,customer_password) values (:fname, :lname, :city, :stateid, :zip, :countryid, :email,:address, :phone,:cell,:major,:grade,:password);";
+			$query = "INSERT INTO customer(customer_fname,customer_lname, customer_city,customer_stateid,customer_zip,customer_countryid,customer_email,customer_address,customer_phone,customer_cell,customer_major,customer_gradclass,customer_password,customer_locationid) values (:fname, :lname, :city, :stateid, :zip, :countryid, :email,:address, :phone,:cell,:major,:grade,:password,:coorid);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':fname',$fname);
@@ -77,7 +77,7 @@ include 'header/_user-details.php';
 			$sth->bindValue(':zip',$zip);
 			$sth->bindValue(':countryid',$countryid);
 			$sth->bindValue(':address',$address);	
-			//$sth->bindValue(':coorid',$coorid);	
+			$sth->bindValue(':coorid',$coorid);	
 			$sth->bindValue(':email',$email);				
 			$sth->bindValue(':cell',$cell);
 			$sth->bindValue(':phone',$phone);

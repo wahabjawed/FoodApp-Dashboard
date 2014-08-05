@@ -51,6 +51,8 @@ include 'header/_user-details.php';
 		
 			$display=$_POST['inputDisplay'];
 			$coor=$_POST['inputCoorID'];
+			$coor = implode(', ',$coor);
+			
 			
 				
 	   
@@ -94,7 +96,7 @@ include 'header/_user-details.php';
                       <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Coordinate</label>
             <div class="col-sm-10">
-            <select class="form-control" id="inputCoorID" name="inputCoorID[]" required>
+            <select class="form-control" id="inputCoorID" name="inputCoorID[]" multiple required>
                <option value=0> Select Coordinate </option>
                <?php 
 			   

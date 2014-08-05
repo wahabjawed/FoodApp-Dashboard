@@ -13,9 +13,7 @@ if($_POST)
 			$searchTerm = "%".$_POST['searchTerm']."%";
 			
 			$query = "select * from customer left outer join state on  customer_stateid=state_id
-											  left outer join country on customer_countryid=country_id
-											  left outer join location on customer_locationid=location_id
-					   where (customer_id=:searchTerm or customer_fname like :searchTerm or customer_lname like :searchTerm or customer_address like :searchTerm or customer_city like :searchTerm or customer_zip like :searchTerm or country_name like :searchTerm or state_name like :searchTerm) order by customer_id";
+											  left outer join country on customer_countryid=country_id                      where (customer_id=:searchTerm or customer_fname like :searchTerm or customer_lname like :searchTerm or customer_address like :searchTerm or customer_city like :searchTerm or customer_zip like :searchTerm or country_name like :searchTerm or state_name like :searchTerm) order by customer_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->bindParam(':searchTerm', $searchTerm);
     		$stmt->execute();
@@ -26,7 +24,6 @@ else{
 			
  			$query = "select * from customer left outer join state on  customer_stateid=state_id
 											  left outer join country on customer_countryid=country_id
-					   						  left outer join location on customer_locationid=location_id
 					order by customer_id";
 			$stmt = $dbh->prepare($query);
 			$stmt->execute();
@@ -141,7 +138,20 @@ function resets(){
 			$name=$result['customer_fname']." ".$result['customer_lname'];
 			$address = "Address: ".$result['customer_address']."<br>"."City: ".$result['customer_city']."<br>"."State: ".$result['state_name']."<br> "."Zip: ".$result['customer_zip']."<br> "."Country: ".$result['country_name'];
 	$contact = "Email: ".$result['customer_email']."<br>"."Phone: ".$result['customer_phone']."<br>"."Cell: ".$result['customer_cell'];
-		$location= "ID: ".$result['location_id']."<br>Name: ".$result['location_name'];
+		
+		
+	$coorid_arr=$result['customer_locationid'];
+			
+			$query = "select * from location where location_id in (${coorid_arr}) ";
+			$stmts = $dbh->prepare($query);
+    		$stmts->execute();
+			$location="";
+			while($results = $stmts->fetch(PDO::FETCH_ASSOC))
+			{
+			$location= $location."ID: ".$results['location_id']."<br>Name: ".$results['location_name']."<br>";
+			}
+		
+		
 		$extra = "Major: ".$result['customer_major']."<br>"."Grade: ".$result['customer_gradclass']."<br>"."Password: ".$result['customer_password']; 
 			echo "
           <tr>

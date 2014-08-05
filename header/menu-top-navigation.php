@@ -26,7 +26,6 @@ echo"<div class='masthead'>
 							<li><a href='customer.php'>Customer</a></li>
 							<li><a href='edu.php'>EDU</a></li>
 							<li><a href='employee.php'>Employees</a></li>
-							<li><a href='employee_location.php'>Employees Location</a></li>
                             <li><a href='product.php'>Product</a></li>
                             <li><a href='location.php'>Location</a></li>
 							<li><a href='center_coordinates.php'>Location Coordinate</a></li>

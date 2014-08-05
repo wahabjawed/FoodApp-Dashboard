@@ -118,9 +118,10 @@ function resets(){
           <tr>
             <th width=5%>#</th>
             <th width=20%>Name</th>
-            <th width=35%>Address Info</th>
-            <th width=20%>Extra Info</th>
+            <th width=25%>Address Info</th>
+            <th width=15%>Extra Info</th>
             <th width=10%>Available</th>
+            <th width=15%>Location Info</th>
             <th width=10%>Action</th>
            
           </tr>
@@ -143,6 +144,21 @@ function resets(){
 			//$location= "ID: ".$result['center_coordinates_id']."<br>"."Longitude: ".$result['coordinates_long']."<br>"."Latitude: ".$result['coordinates_lat']."<br>"."Radius KM: ".$result['radius_km']."<br>Radius Mile: ".$result['radius_mile'];;
 		$extra = "Image: <br> <img src='UploadedImages\\${result['employeeimage_id']}' height='70px' width='70px' class='img-responsive'/>";
 		
+		
+		
+		
+		$coorid_arr=$result['employee_locationid'];
+			
+			$query = "select * from location where location_id in (${coorid_arr}) ";
+			$stmts = $dbh->prepare($query);
+    		$stmts->execute();
+			$location="";
+			while($results = $stmts->fetch(PDO::FETCH_ASSOC))
+			{
+			$location= $location."ID: ".$results['location_id']."<br>Name: ".$results['location_name']."<br>";
+			}
+		
+		
 			echo "
           <tr>
             <td>{$id}</td>
@@ -153,6 +169,7 @@ function resets(){
 						
 						<td>${extra}</td>
 						<td>${available}</td>
+						<td>${location}</td>
 		    <td><a href='#' onclick='return deleteConfirm(${id});' > Delete </a>
 			<a href='employee_update.php?id={$id}'>Update</a></td>
    

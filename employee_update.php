@@ -29,6 +29,9 @@ if(isset($_GET['id'])){
 	$available =  $row['employee_available'];
 	
 	$img=$row['employeeimage_id'];
+	$coorid =  $row['employee_locationid'];
+	$coor = explode(',',$coorid);
+
 	
 		}
 
@@ -81,7 +84,8 @@ if(isset($_GET['id'])){
 		$available = $_POST['inputAvailable'];
 	
 		$imageID=$_FILES["file"]["name"];
-		
+		$coorid = $_POST['inputLoc'];
+		$coorid = implode(', ',$coorid);
 		
 		include 'header/image_upload.php';	
 
@@ -93,7 +97,7 @@ if(isset($_GET['id'])){
 		}
 		
 		try {
-			$query = "UPDATE employee SET employee_fname=:fname, employee_lname=:lname, employee_address=:address, employee_city=:city, employee_stateid=:stateid, employee_zip=:zip, employee_countryid=:countryid, employee_available=:available , employeeimage_id=:image where employee_id = :id";
+			$query = "UPDATE employee SET employee_fname=:fname, employee_lname=:lname, employee_address=:address, employee_city=:city, employee_stateid=:stateid, employee_zip=:zip, employee_countryid=:countryid, employee_available=:available , employeeimage_id=:image, employee_locationid= :coorid where employee_id = :id";
 			
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':id',$_GET["id"]);
@@ -105,7 +109,8 @@ if(isset($_GET['id'])){
 			$sth->bindValue(':zip',$zip);
 			$sth->bindValue(':countryid',$countryid);
 			$sth->bindValue(':available',$available);	
-			$sth->bindValue(':image',$code);				
+			$sth->bindValue(':image',$code);		
+			$sth->bindValue(':coorid',$coorid);			
 			$sth->execute() ;
 		
 			//echo "Product Updated Successfully!";
@@ -224,6 +229,44 @@ echo "<option value=${sta_id} selected> ${sta_name} </option>";
             <label for="inputTax" class="col-sm-2 control-label">Image</label>
             <div class="col-sm-10">
                <input type="file" value="File" name="file" id="file" />
+            </div>
+          </div>
+ 
+                   <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Location</label>
+            <div class="col-sm-10">
+            <select class="form-control" id="inputLoc" name="inputLoc[]" multiple required>
+               <option value=0> Select Location</option>
+               <?php 
+			   
+			 $query = "select * from location";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$loc_id = $result['location_id'];
+		    $loc_name =  $result['location_name'];
+			$val=false;
+			
+			for($i=0;$i<count($coor);$i++){
+		    			
+				if($loc_id==$coor[$i]){
+			
+					$val=true;
+			
+				}
+			}
+			if($val){
+			echo "<option value=${loc_id} selected> ${loc_name} </option>";
+			}else{
+			echo "<option value=${loc_id}> ${loc_name} </option>";
+			}
+			}
+		 ?>
+         </select>
             </div>
           </div>
  

@@ -60,10 +60,12 @@ include 'header/_user-details.php';
 		$zip = $_POST['inputZip'];
 		$countryid = $_POST['inputCountry'];
 		$available = $_POST['inputAvailable'];
+		$coorid = $_POST['inputCoor'];
+		$coorid = implode(', ',$coorid);
 		
 		
 		try {
-			$query = "INSERT INTO employee(employee_fname, employee_lname, employee_address, employee_city,employee_stateid,employee_zip,employee_countryid,employeeimage_id,employee_available) values (:fname, :lname , :address, :city, :stateid, :zip, :countryid, :image,:available);";
+			$query = "INSERT INTO employee(employee_fname, employee_lname, employee_address, employee_city,employee_stateid,employee_zip,employee_countryid,employeeimage_id,employee_available,employee_locationid) values (:fname, :lname , :address, :city, :stateid, :zip, :countryid, :image,:available,:coorid);";
 			//$query += "VALUES(:CompanyName)";
 			$sth = $dbh->prepare($query);
 			$sth->bindValue(':fname',$fname);
@@ -74,7 +76,8 @@ include 'header/_user-details.php';
 			$sth->bindValue(':zip',$zip);
 			$sth->bindValue(':countryid',$countryid);
 			$sth->bindValue(':available',$available);				
-			$sth->bindValue(':image',$UploadedImg);						
+			$sth->bindValue(':image',$UploadedImg);
+			$sth->bindValue(':coorid',$coorid);						
 			$sth->execute() ;
 		
 						echo "
@@ -187,7 +190,35 @@ include 'header/_user-details.php';
             </div>
           </div>
  
-    
+ 
+ 
+     
+                     <div class="form-group">
+            <label for="inputTax" class="col-sm-2 control-label">Location</label>
+            <div class="col-sm-10">
+            <select class="form-control" id="inputLoc" name="inputLoc[]" multiple required>
+               <option value=0> Select Location</option>
+               <?php 
+			   
+			 $query = "select * from location";
+			$stmt = $dbh->prepare($query);
+			$stmt->execute();
+ 
+ 
+ while($result = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				//	$result = $result[0];
+			$coor_id = $result['location_id'];
+		    $coor_name = $result['location_name'];
+		
+		    
+			echo "<option value=${coor_id}> ${coor_name} </option>";
+			}
+		 ?>
+         </select>
+            </div>
+          </div>
+             
                <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Availability</label>
             <div class="col-sm-10">
@@ -195,6 +226,7 @@ include 'header/_user-details.php';
             <input type="checkbox" class="form-control" id="inputAvailable" name="inputAvailable" value="1" >
             </div>
           </div>
+ 
  
  
                      

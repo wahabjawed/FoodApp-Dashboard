@@ -32,6 +32,7 @@ if(isset($_GET['id'])){
 	$major=$row['customer_major'];
 	$gradclass=$row['customer_gradclass'];
 	$password=$row['customer_password'];
+	$coor = explode(',',$coorid);
 	
 		}?>
 
@@ -89,7 +90,7 @@ if(isset($_GET['id'])){
 		$major = $_POST['inputMajor'];
 		$grade = $_POST['inputGrade'];
 		$password = $_POST['inputPassword'];
-		
+		$coorid = implode(', ',$coorid);
 		
 		
 	
@@ -231,7 +232,7 @@ echo "<option value=${sta_id} selected> ${sta_name} </option>";
                      <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Location</label>
             <div class="col-sm-10">
-            <select class="form-control" id="inputLoc" name="inputLoc[]" required>
+            <select class="form-control" id="inputLoc" name="inputLoc[]" multiple required>
                <option value=0> Select Location</option>
                <?php 
 			   
@@ -243,17 +244,22 @@ echo "<option value=${sta_id} selected> ${sta_name} </option>";
  while($result = $stmt->fetch(PDO::FETCH_ASSOC))
 			{
 				//	$result = $result[0];
-			$coor_id = $result['location_id'];
-		    $coor_name = $result['location_name'];
-		
-		    if($coorid==$coor_id){
+			$loc_id = $result['location_id'];
+		    $loc_name =  $result['location_name'];
+			$val=false;
 			
-			echo "<option value=${coor_id} selected> ${coor_name} </option>";
+			for($i=0;$i<count($coor);$i++){
+		    			
+				if($loc_id==$coor[$i]){
 			
+					$val=true;
+			
+				}
+			}
+			if($val){
+			echo "<option value=${loc_id} selected> ${loc_name} </option>";
 			}else{
-			
-			echo "<option value=${coor_id}> ${coor_name} </option>";
-			
+			echo "<option value=${loc_id}> ${loc_name} </option>";
 			}
 			}
 		 ?>

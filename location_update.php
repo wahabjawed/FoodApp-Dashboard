@@ -21,7 +21,9 @@ if(isset($_GET['id'])){
 	$location_id=$row['location_id'];
 	$name = $row['location_name'];
 	$display = $row['display'];
-	$coor = $row['location_coordinate_id'];
+	$coor = explode(',',$row['location_coordinate_id']);
+	
+	
 	
 		}
 
@@ -68,7 +70,7 @@ if(isset($_GET['id'])){
 		$name = $_POST['inputName'];
 		$code = $_POST['inputDisplay'];
 		$coor=$_POST['inputCoorID'];
-		
+		$coor = implode(', ',$coor);	
 	
 
 	
@@ -115,7 +117,7 @@ if(isset($_GET['id'])){
                     <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Coordinate</label>
             <div class="col-sm-10">
-            <select class="form-control" id="inputCoorID" name="inputCoorID[]" required>
+            <select class="form-control" id="inputCoorID" name="inputCoorID[]" multiple required>
                <option value=0> Select Coordinate </option>
                <?php 
 			   
@@ -129,8 +131,17 @@ if(isset($_GET['id'])){
 				//	$result = $result[0];
 			$loc_id = $result['center_coordinates_id'];
 		    $loc_name = $result['coordinates_name'];
-		
-		    if($loc_id==$coor){
+			$val=false;
+			
+			for($i=0;$i<count($coor);$i++){
+		    			
+				if($loc_id==$coor[$i]){
+			
+					$val=true;
+			
+				}
+			}
+			if($val){
 			echo "<option value=${loc_id} selected> ${loc_name} </option>";
 			}else{
 			echo "<option value=${loc_id}> ${loc_name} </option>";

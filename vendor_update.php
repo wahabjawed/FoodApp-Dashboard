@@ -31,6 +31,7 @@ if(isset($_GET['id'])){
 	$img=$row['vendor_imageid'];
 	$closeTime=$row['vendor_closetime'];
 	$openTime=$row['vendor_opentime'];
+	$coor = explode(',',$coorid);
 		}
 
 ?>
@@ -84,6 +85,7 @@ if(isset($_GET['id'])){
 		$imageID=$_FILES["file"]["name"];
 		$opentime = $_POST['inputOpenT'];
 		$closetime = $_POST['inputCloseT'];
+			$coorid = implode(', ',$coorid);
 		
 		
 		include 'header/image_upload.php';	
@@ -240,7 +242,7 @@ echo "<option value=${sta_id} selected> ${sta_name} </option>";
                      <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Coordinates</label>
             <div class="col-sm-10">
-            <select class="form-control" id="inputCoor" name="inputCoor[]" required>
+            <select class="form-control" id="inputCoor" name="inputCoor[]" multiple required>
                <option value=0> Select Coordinates</option>
                <?php 
 			   
@@ -249,20 +251,26 @@ echo "<option value=${sta_id} selected> ${sta_name} </option>";
 			$stmt->execute();
  
  
+  
  while($result = $stmt->fetch(PDO::FETCH_ASSOC))
 			{
 				//	$result = $result[0];
-			$coor_id = $result['center_coordinates_id'];
-		    $coor_name = $result['coordinates_name'];
-		
-		    if($coorid==$coor_id){
+			$loc_id = $result['center_coordinates_id'];
+		    $loc_name = $result['coordinates_name'];
+			$val=false;
 			
-			echo "<option value=${coor_id} selected> ${coor_name} </option>";
+			for($i=0;$i<count($coor);$i++){
+		    			
+				if($loc_id==$coor[$i]){
 			
+					$val=true;
+			
+				}
+			}
+			if($val){
+			echo "<option value=${loc_id} selected> ${loc_name} </option>";
 			}else{
-			
-			echo "<option value=${coor_id}> ${coor_name} </option>";
-			
+			echo "<option value=${loc_id}> ${loc_name} </option>";
 			}
 			}
 		 ?>

@@ -63,6 +63,7 @@ include 'header/_user-details.php';
 		$display = $_POST['inputDisplay'];
 		$opentime = $_POST['inputOpenT'];
 		$closetime = $_POST['inputCloseT'];
+		$coorid = implode(', ',$coorid);
 		
 		try {
 			$query = "INSERT INTO vendor(vendor_name,vendorstore_no, vendor_city,vendor_stateid,vendor_zip,vendor_countryid,vendor_imageid,vendor_address, vendor_coordinates_id,vendor_display,vendor_opentime,vendor_closetime) values (:name, :store, :city, :stateid, :zip, :countryid, :image,:address, :coorid,:display,:opent,:closet);";
@@ -197,7 +198,7 @@ include 'header/_user-details.php';
                      <div class="form-group">
             <label for="inputTax" class="col-sm-2 control-label">Coordinates</label>
             <div class="col-sm-10">
-            <select class="form-control" id="inputCoor" name="inputCoor[]" required>
+            <select class="form-control" id="inputCoor" name="inputCoor[]" multiple required>
                <option value=0> Select Coordinates</option>
                <?php 
 			   
